@@ -1,339 +1,924 @@
 /*==========================================================
  PRATICANDO COM PYTHON E JAVASCRIPT
  app.js
- Versão 1.0
+ Versão 2.0
+ Plataforma de Estudos
 ==========================================================*/
 
 "use strict";
 
+
 /*==========================================================
-CONFIGURAÇÕES
+ CONFIGURAÇÃO GLOBAL
 ==========================================================*/
+
 
 const App = {
 
-    version: "1.0",
 
-    currentLanguage: "javascript",
+version:"2.0",
 
-    currentTheme: "dark",
 
-    autoSave: true,
+language:"javascript",
 
-    fileName: "Novo Projeto",
 
-    projects: [],
+theme:"dark",
 
-    currentProject: null
+
+autoSave:true,
+
+
+editor:null,
+
+
+projectName:"Novo Projeto",
+
+
+executionCount:0,
+
+
+score:0,
+
+
+stats:{
+
+
+questions:0,
+
+correct:0,
+
+time:0
+
+
+},
+
+
+files:{
+
+
+javascript:"",
+
+python:"",
+
+html:"",
+
+css:""
+
+
+}
+
 
 };
 
 
-/*==========================================================
-ELEMENTOS
-==========================================================*/
-
-const editor = document.getElementById("code");
-
-const preview = document.getElementById("preview");
-
-const consoleOutput = document.getElementById("console");
-
-const languageSelect = document.getElementById("lang");
-
 
 /*==========================================================
-INICIALIZAÇÃO
+ INICIALIZAÇÃO
 ==========================================================*/
 
-window.addEventListener("load", () => {
 
-    initialize();
+window.addEventListener("DOMContentLoaded",()=>{
+
+
+startApp();
+
 
 });
 
 
-function initialize(){
 
-    loadProject();
 
-    createEvents();
+async function startApp(){
 
-    updateTitle();
+
+console.log(
+"🚀 Plataforma iniciada"
+);
+
+
+
+loadStorage();
+
+
+
+initializeEditor();
+
+
+
+events();
+
+
+
+updateStats();
+
 
 }
+
+
+
 
 
 /*==========================================================
-EVENTOS
+ MONACO EDITOR
 ==========================================================*/
 
-function createEvents(){
 
-    if(editor){
+function initializeEditor(){
 
-        editor.addEventListener("input",()=>{
 
-            autoSave();
+if(typeof monaco==="undefined"){
 
-        });
 
-    }
+console.warn(
+"Monaco Editor não carregado"
+);
+
+
+return;
+
 
 }
+
+
+
+App.editor =
+monaco.editor.create(
+
+document.getElementById("editor"),
+
+
+{
+
+
+value:
+getStarterCode(),
+
+
+language:
+App.language,
+
+
+theme:
+"vs-dark",
+
+
+automaticLayout:true,
+
+
+fontSize:15,
+
+
+minimap:{enabled:false}
+
+
+
+});
+
+
+}
+
+
+
+
+
+function changeLanguage(lang){
+
+
+App.language=lang;
+
+
+
+monaco.editor.setModelLanguage(
+
+App.editor.getModel(),
+
+lang
+
+);
+
+
+
+App.editor.setValue(
+getStarterCode()
+);
+
+
+
+autoSave();
+
+
+
+}
+
+
 
 
 /*==========================================================
-CONSOLE
+ CÓDIGO INICIAL
 ==========================================================*/
 
-function clearConsole(){
 
-    consoleOutput.textContent="";
+function getStarterCode(){
+
+
+
+switch(App.language){
+
+
+case"python":
+
+return `print("Olá Python")`;
+
+
+
+case"html":
+
+return `<h1>Minha Página</h1>`;
+
+
+
+case"css":
+
+return `body{
+background:white;
+}`;
+
+
+
+default:
+
+return `console.log("Olá JavaScript");`;
+
+
 
 }
 
 
-function log(message){
-
-    consoleOutput.textContent += message + "\n";
 
 }
 
 
-function error(message){
 
-    consoleOutput.textContent +=
-
-    "❌ " + message + "\n";
-
-}
 
 
 /*==========================================================
-EXECUTAR
+ EXECUÇÃO PRINCIPAL
 ==========================================================*/
+
 
 function run(){
 
-    clearConsole();
 
-    const language = languageSelect.value;
+clearConsole();
 
-    if(language==="JavaScript"){
 
-        runJavaScript();
 
-    }
+App.executionCount++;
 
-    else if(language==="HTML"){
 
-        runHTML();
 
-    }
+switch(App.language){
 
-    else if(language==="Python (futuro Pyodide)"){
 
-        runPython();
+case"javascript":
 
-    }
+executeJavaScript();
+
+break;
+
+
+
+case"python":
+
+executePython();
+
+break;
+
+
+
+case"html":
+
+executeHTML();
+
+break;
+
+
+
+case"css":
+
+executeCSS();
+
+break;
+
+
+
+default:
+
+log(
+"Linguagem não encontrada"
+);
+
 
 }
 
 
-/*==========================================================
-JAVASCRIPT
-==========================================================*/
 
-function runJavaScript(){
+saveStats();
 
-    const originalConsole = console.log;
 
-    let logs = [];
-
-    console.log = function(...args){
-
-        logs.push(args.join(" "));
-
-    };
-
-    try{
-
-        new Function(editor.value)();
-
-        logs.forEach(item=>{
-
-            log(item);
-
-        });
-
-    }
-
-    catch(e){
-
-        error(e.message);
-
-    }
-
-    console.log = originalConsole;
 
 }
 
 
+
+
+
+
 /*==========================================================
-HTML
+ JAVASCRIPT
 ==========================================================*/
 
-function runHTML(){
 
-    preview.srcdoc = editor.value;
+function executeJavaScript(){
 
-    log("Preview atualizado.");
+
+let output=[];
+
+
+const oldLog=
+console.log;
+
+
+
+console.log=(...args)=>{
+
+
+output.push(
+args.join(" ")
+);
+
+
+};
+
+
+
+try{
+
+
+new Function(
+
+App.editor.getValue()
+
+)();
+
+
+
+output.forEach(log);
+
+
 
 }
 
 
-/*==========================================================
-PYTHON
-==========================================================*/
+catch(error){
 
-function runPython(){
 
-    log("Pyodide será integrado.");
+showError(error);
+
 
 }
 
 
+
+console.log=oldLog;
+
+
+
+}
+
+
+
+
 /*==========================================================
-SALVAR
+ PYTHON PYODIDE
 ==========================================================*/
+
+
+async function executePython(){
+
+
+if(!window.pyodide){
+
+
+log(
+"Carregando Python..."
+);
+
+
+window.pyodide =
+await loadPyodide();
+
+
+}
+
+
+
+try{
+
+
+let result =
+
+await pyodide.runPythonAsync(
+
+App.editor.getValue()
+
+);
+
+
+
+log(result ?? "");
+
+
+
+}
+
+
+catch(error){
+
+
+showError(error);
+
+
+
+}
+
+
+}
+
+
+
+
+
+/*==========================================================
+ HTML
+==========================================================*/
+
+
+function executeHTML(){
+
+
+const preview=
+
+document.getElementById(
+"preview"
+);
+
+
+
+preview.srcdoc =
+
+App.editor.getValue();
+
+
+
+log(
+"HTML atualizado"
+);
+
+
+
+}
+
+
+
+
+/*==========================================================
+ CSS
+==========================================================*/
+
+
+function executeCSS(){
+
+
+const preview=
+
+document.getElementById(
+"preview"
+);
+
+
+
+preview.srcdoc=`
+
+<style>
+
+${App.editor.getValue()}
+
+</style>
+
+
+<h1>
+
+Preview CSS
+
+</h1>
+
+
+`;
+
+
+
+log(
+"CSS aplicado"
+);
+
+
+}
+
+
+
+
+/*==========================================================
+ CONSOLE
+==========================================================*/
+
+
+function clearConsole(){
+
+
+const box=
+
+document.getElementById(
+"console"
+);
+
+
+
+if(box)
+
+box.textContent="";
+
+
+}
+
+
+
+
+function log(text){
+
+
+const box=
+
+document.getElementById(
+"console"
+);
+
+
+
+if(box)
+
+box.textContent +=
+
+text+"\n";
+
+
+}
+
+
+
+
+
+function showError(error){
+
+
+log(
+"❌ ERRO\n"+
+error.message
+
+);
+
+
+}
+
+
+
+
+
+/*==========================================================
+ SALVAR PROJETO
+==========================================================*/
+
 
 function saveProject(){
 
-    const data = {
 
-        language: languageSelect.value,
+const data={
 
-        code: editor.value,
 
-        date: new Date().toLocaleString()
+name:App.projectName,
 
-    };
 
-    localStorage.setItem(
+language:App.language,
 
-        "ppj_project",
 
-        JSON.stringify(data)
+code:
 
-    );
+App.editor.getValue(),
 
-    log("Projeto salvo.");
+
+date:
+
+new Date()
+
+
+};
+
+
+
+localStorage.setItem(
+
+"PPJ_PROJECT",
+
+JSON.stringify(data)
+
+);
+
+
+
+log(
+"💾 Projeto salvo"
+);
+
 
 }
 
 
+
+
 /*==========================================================
-AUTO SAVE
+ CARREGAR PROJETO
 ==========================================================*/
+
+
+function loadStorage(){
+
+
+const data=
+
+localStorage.getItem(
+"PPJ_PROJECT"
+);
+
+
+
+if(!data)
+
+return;
+
+
+
+const project=
+
+JSON.parse(data);
+
+
+
+App.language=
+project.language;
+
+
+
+App.projectName=
+project.name;
+
+
+}
+
+
+
+
+
+/*==========================================================
+ AUTO SAVE
+==========================================================*/
+
 
 function autoSave(){
 
-    if(!App.autoSave) return;
 
-    saveProject();
+if(!App.autoSave)
 
-}
+return;
 
 
-/*==========================================================
-CARREGAR
-==========================================================*/
 
-function loadProject(){
+saveProject();
 
-    const project =
 
-    localStorage.getItem("ppj_project");
-
-    if(!project) return;
-
-    const data = JSON.parse(project);
-
-    editor.value = data.code;
-
-    languageSelect.value = data.language;
 
 }
 
 
+
+
+
 /*==========================================================
-NOVO PROJETO
+ NOVO PROJETO
 ==========================================================*/
+
 
 function newProject(){
 
-    if(confirm("Criar novo projeto?")){
 
-        editor.value="";
+if(confirm(
+"Novo projeto?"
+)){
 
-        clearConsole();
 
-    }
+
+App.editor.setValue("");
+
+
+
+clearConsole();
+
+
 
 }
 
 
+
+}
+
+
+
+
+
 /*==========================================================
-DOWNLOAD
+ DOWNLOAD
 ==========================================================*/
+
 
 function downloadProject(){
 
-    const blob = new Blob(
 
-        [editor.value],
+const code=
 
-        {type:"text/plain"}
+App.editor.getValue();
 
-    );
 
-    const a = document.createElement("a");
 
-    a.href = URL.createObjectURL(blob);
+const blob=
 
-    a.download="codigo.txt";
+new Blob(
 
-    a.click();
+[code],
 
-    URL.revokeObjectURL(a.href);
+{
+type:"text/plain"
+}
+
+);
+
+
+
+const link=
+
+document.createElement(
+"a"
+);
+
+
+
+link.href=
+
+URL.createObjectURL(blob);
+
+
+
+link.download=
+
+"Projeto_codigo.txt";
+
+
+
+link.click();
+
+
 
 }
 
 
+
+
+
 /*==========================================================
-ATUALIZAR TÍTULO
+ ESTATÍSTICAS
 ==========================================================*/
 
-function updateTitle(){
 
-    document.title =
+function updateStats(){
 
-    "Praticando com Python e JavaScript";
+
+localStorage.setItem(
+
+"PPJ_STATS",
+
+JSON.stringify(
+App.stats
+)
+
+);
+
+
 
 }
 
 
+
+
+function saveStats(){
+
+
+App.stats.time++;
+
+updateStats();
+
+
+}
+
+
+
+
 /*==========================================================
-BOTÕES
+ EVENTOS
 ==========================================================*/
 
-window.run = run;
 
-window.save = saveProject;
+function events(){
 
-window.download = downloadProject;
 
-window.clearConsole = clearConsole;
 
-window.newProject = newProject;
+const runButton=
+
+document.getElementById(
+"run"
+);
+
+
+
+if(runButton)
+
+runButton.onclick=run;
+
+
+
+const saveButton=
+
+document.getElementById(
+"save"
+);
+
+
+
+if(saveButton)
+
+saveButton.onclick=saveProject;
+
+
+
+}
+
+
+
+
+
+/*==========================================================
+ EXPORTAÇÃO GLOBAL
+==========================================================*/
+
+
+window.App=App;
+
+
+window.run=run;
+
+
+window.saveProject=
+saveProject;
+
+
+window.newProject=
+newProject;
+
+
+window.downloadProject=
+downloadProject;
+
+
+window.clearConsole=
+clearConsole;
+
+
+window.changeLanguage=
+changeLanguage;
