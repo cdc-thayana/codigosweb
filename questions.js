@@ -2,9 +2,9 @@
  PRATICANDO COM PYTHON E JAVASCRIPT
 
  questions.js
- Banco de Exercícios
+ Versão 3.8
 
- Versão 1.0
+ Banco de Exercícios
 
 ==========================================================*/
 
@@ -13,8 +13,7 @@
 
 
 
-const Questions = [
-
+const questions = [
 
 
 
@@ -32,38 +31,30 @@ id:1,
 language:"python",
 
 
-level:"fácil",
+level:"Fácil",
 
 
-title:"Olá Mundo",
+title:
 
-
-description:
-
-'Crie um programa que mostre "Olá Mundo".',
+"Crie um programa que leia dois números e mostre a soma.",
 
 
 
 hint:
 
-"Use a função print().",
-
-
-
-starter:
-
-`print("")`,
+"Use input() e int().",
 
 
 
 answer:
 
-`print("Olá Mundo")`,
+`
+a=int(input())
 
+b=int(input())
 
-
-points:10
-
+print(a+b)
+`
 
 },
 
@@ -80,47 +71,26 @@ id:2,
 language:"python",
 
 
-level:"fácil",
+level:"Fácil",
 
 
-title:"Soma de números",
+title:
 
-
-description:
-
-"Crie um programa que some dois números.",
+"Crie um programa que mostre uma mensagem na tela.",
 
 
 
 hint:
 
-"Use variáveis e o operador +.",
-
-
-
-starter:
-
-`
-a=10
-b=20
-
-print()
-`,
+"Use print().",
 
 
 
 answer:
 
 `
-a=10
-b=20
-
-print(a+b)
-`,
-
-
-points:10
-
+print("Olá Mundo")
+`
 
 },
 
@@ -138,45 +108,111 @@ id:3,
 language:"python",
 
 
-level:"fácil",
+level:"Fácil",
 
 
-title:"Média escolar",
+title:
 
-
-description:
-
-"Calcule a média de duas notas.",
+"Crie uma variável com seu nome e mostre na tela.",
 
 
 
 hint:
 
-"Some as notas e divida por 2.",
-
-
-
-starter:
-
-`
-nota1=8
-nota2=10
-
-`,
+"Use uma variável e print().",
 
 
 
 answer:
 
 `
-media=(nota1+nota2)/2
+nome="Maria"
+
+print(nome)
+`
+
+},
+
+
+
+
+
+{
+
+
+id:4,
+
+
+language:"python",
+
+
+level:"Médio",
+
+
+title:
+
+"Calcule a média de três notas.",
+
+
+
+hint:
+
+"Some os valores e divida por 3.",
+
+
+
+answer:
+
+`
+n1=7
+n2=8
+n3=9
+
+media=(n1+n2+n3)/3
 
 print(media)
-`,
+`
+
+},
 
 
-points:15
 
+
+
+{
+
+
+id:5,
+
+
+language:"python",
+
+
+level:"Médio",
+
+
+title:
+
+"Verifique se um número é positivo ou negativo.",
+
+
+
+hint:
+
+"Use if e else.",
+
+
+
+answer:
+
+`
+numero=int(input())
+
+if numero>=0:
+    print("Positivo")
+else:
+    print("Negativo")
+`
 
 },
 
@@ -186,29 +222,25 @@ points:15
 
 
 /*==========================================================
- JAVASCRIPT BÁSICO
+ JAVASCRIPT
 ==========================================================*/
 
 
 {
 
 
-id:100,
+id:6,
 
 
 language:"javascript",
 
 
-level:"fácil",
+level:"Fácil",
 
 
-title:"Console Hello",
+title:
 
-
-
-description:
-
-'Mostre uma mensagem no console.',
+"Mostre uma mensagem usando JavaScript.",
 
 
 
@@ -218,24 +250,51 @@ hint:
 
 
 
-starter:
+answer:
 
 `
-console.log("");
-`,
+console.log("Olá JavaScript");
+`
+
+},
+
+
+
+
+
+{
+
+
+id:7,
+
+
+language:"javascript",
+
+
+level:"Fácil",
+
+
+title:
+
+"Some dois números.",
+
+
+
+hint:
+
+"Use variáveis.",
 
 
 
 answer:
 
 `
-console.log("Olá JavaScript");
-`,
+let a=10;
 
+let b=20;
 
-
-points:10
-
+console.log(a+b);
+`
 
 },
 
@@ -247,55 +306,44 @@ points:10
 {
 
 
-id:101,
+id:8,
 
 
 language:"javascript",
 
 
-level:"fácil",
+level:"Médio",
 
 
-title:"Somando valores",
+title:
 
-
-
-description:
-
-"Crie duas variáveis e mostre a soma.",
+"Crie uma função que multiplica dois valores.",
 
 
 
 hint:
 
-"Use o operador +.",
-
-
-
-starter:
-
-`
-let a=10;
-let b=20;
-
-`,
+"Use function.",
 
 
 
 answer:
 
 `
-let a=10;
-let b=20;
+function multiplicar(a,b){
 
-console.log(a+b);
-`,
+return a*b;
+
+}
 
 
-points:10
-
+console.log(
+multiplicar(5,2)
+);
+`
 
 },
+
 
 
 
@@ -303,27 +351,23 @@ points:10
 
 
 /*==========================================================
- HTML
+ HTML / CSS
 ==========================================================*/
 
 
 {
 
 
-id:200,
+id:9,
 
 
 language:"html",
 
 
-level:"fácil",
+level:"Fácil",
 
 
-title:"Primeira página",
-
-
-
-description:
+title:
 
 "Crie um título HTML.",
 
@@ -335,27 +379,53 @@ hint:
 
 
 
-starter:
+answer:
 
 `
 <h1>
-
+Meu primeiro site
 </h1>
-`,
+`
+
+},
+
+
+
+
+
+{
+
+
+id:10,
+
+
+language:"css",
+
+
+level:"Fácil",
+
+
+title:
+
+"Altere a cor do texto de uma página.",
+
+
+
+hint:
+
+"Use color.",
 
 
 
 answer:
 
 `
-<h1>
-Minha primeira página
-</h1>
-`,
+body{
 
+color:red;
 
-points:10
-
+}
+`
 
 },
 
@@ -365,68 +435,84 @@ points:10
 
 
 /*==========================================================
- CSS
+ PYTHON INTERMEDIÁRIO
 ==========================================================*/
 
 
 {
 
 
-id:300,
+id:11,
 
 
-language:"css",
+language:"python",
 
 
-level:"fácil",
+level:"Médio",
 
 
-title:"Alterar cor de fundo",
+title:
 
-
-
-description:
-
-"Modifique a cor do corpo da página.",
+"Faça uma contagem de 1 até 10.",
 
 
 
 hint:
 
-"Use background.",
-
-
-
-starter:
-
-`
-body{
-
-}
-`,
+"Use for.",
 
 
 
 answer:
 
 `
-body{
+for i in range(1,11):
 
-background:red;
+    print(i)
+`
 
-}
-`,
-
-
-points:10
-
-
-}
+},
 
 
 
 
-];
+
+
+{
+
+
+id:12,
+
+
+language:"python",
+
+
+level:"Avançado",
+
+
+title:
+
+"Crie uma lista e mostre seus elementos.",
+
+
+
+hint:
+
+"Use uma lista e for.",
+
+
+
+answer:
+
+`
+lista=[1,2,3,4]
+
+for item in lista:
+
+    print(item)
+`
+
+},
 
 
 
@@ -434,58 +520,46 @@ points:10
 
 
 /*==========================================================
- FUNÇÕES DO BANCO
+ JAVASCRIPT AVANÇADO
 ==========================================================*/
 
 
-const QuestionManager = {
+{
+
+
+id:13,
+
+
+language:"javascript",
+
+
+level:"Avançado",
+
+
+title:
+
+"Crie um array e percorra seus valores.",
 
 
 
-all(){
+hint:
 
-
-return Questions;
-
-
-},
+"Use forEach().",
 
 
 
+answer:
+
+`
+let numeros=[1,2,3];
 
 
-find(id){
+numeros.forEach(
 
-
-return Questions.find(
-
-q=>
-
-q.id===id
-
-);
-
-
-
-},
-
-
-
-
-
-filter(language){
-
-
-
-return Questions.filter(
-
-q=>
-
-q.language===language
+n=>console.log(n)
 
 );
-
-
+`
 
 },
 
@@ -494,31 +568,100 @@ q.language===language
 
 
 
-filterLevel(level){
+{
+
+
+id:14,
+
+
+language:"javascript",
+
+
+level:"Avançado",
+
+
+title:
+
+"Crie um objeto JavaScript.",
 
 
 
-return Questions.filter(
+hint:
 
-q=>
-
-q.level===level
-
-);
+"Use {}.",
 
 
+
+answer:
+
+`
+let pessoa={
+
+nome:"Ana",
+
+idade:20
+
+};
+
+
+console.log(pessoa);
+
+`
+
+},
+
+
+
+
+
+
+/*==========================================================
+ HTML/CSS PROJETOS
+==========================================================*/
+
+
+{
+
+
+id:15,
+
+
+language:"html",
+
+
+level:"Médio",
+
+
+title:
+
+"Crie um cartão simples usando HTML.",
+
+
+
+hint:
+
+"Use div.",
+
+
+
+answer:
+
+`
+<div>
+
+<h2>
+Meu Cartão
+</h2>
+
+<p>
+Conteúdo
+</p>
+
+</div>
+`
 
 }
 
 
 
-};
-
-
-
-
-
-window.Questions = Questions;
-
-
-window.QuestionManager = QuestionManager;
+];
