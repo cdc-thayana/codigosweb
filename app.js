@@ -65,7 +65,6 @@ const languageSelect =
 document.getElementById("lang");
 
 
-
 if(languageSelect){
 
 
@@ -87,7 +86,6 @@ const runButton =
 document.getElementById("run");
 
 
-
 if(runButton){
 
 
@@ -97,8 +95,8 @@ executeCode();
 
 };
 
-
 }
+
 
 
 };
