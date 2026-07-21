@@ -54,8 +54,11 @@ const App = {
 window.onload=function(){
 
 
+loadStats();
 
-    loadStats();
+initMonaco();
+
+};
 
 
 
