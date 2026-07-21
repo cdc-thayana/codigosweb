@@ -110,98 +110,57 @@ executeCode();
 function initMonaco(){
 
 
-
 require(
-
-{
-
-
-paths:
-
-{
-
-
-vs:
-
-"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
-
-
-}
-
-
-},
-
-
-function(){
-
-
-
-require(
-
 [
-
 "vs/editor/editor.main"
-
 ],
 
-
 function(){
+
+
+const container = document.getElementById("editor");
+
+
+if(!container){
+
+console.log("Editor não encontrado");
+
+return;
+
+}
 
 
 
 App.editor = monaco.editor.create(
 
-
-document.getElementById("editor"),
-
+container,
 
 {
 
-
 value:getStarterCode("javascript"),
-
 
 language:"javascript",
 
-
 theme:"vs-dark",
-
 
 automaticLayout:true,
 
-
 fontSize:15
 
-
 }
 
 
 );
- setTimeout(()=>{
-
-    loadQuestion();
-
-},500);
 
 
 
+console.log("Editor Monaco criado");
 
 
 
 }
 
-
-
 );
-
-
-
-}
-
-
-
-);
-
 
 
 }
