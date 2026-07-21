@@ -2,7 +2,7 @@
  PRATICANDO COM PYTHON E JAVASCRIPT
 
  app.js
- Versão 3.8.1
+ Versão 3.8.1 FINAL
 
  Controlador Principal
 
@@ -46,11 +46,6 @@ const App = {
 
 
 
-
-
-
-
-
 /*==========================================================
  INICIALIZAÇÃO
 ==========================================================*/
@@ -60,26 +55,13 @@ window.onload=function(){
 
 
 
-    initMonaco();
-
-
-
     loadStats();
-
-
-
-    loadQuestion();
-
-
-
-
 
 
 
     const languageSelect =
 
     document.getElementById("lang");
-
 
 
 
@@ -108,11 +90,9 @@ window.onload=function(){
 
 
 
-
     const runButton =
 
     document.getElementById("run");
-
 
 
 
@@ -133,13 +113,11 @@ window.onload=function(){
 
 
 
+    initMonaco();
+
+
+
 };
-
-
-
-
-
-
 
 
 
@@ -173,6 +151,7 @@ vs:
 
 },
 
+
 function(){
 
 
@@ -185,13 +164,16 @@ require(
 
 ],
 
+
 function(){
 
 
 
 App.editor = monaco.editor.create(
 
+
 document.getElementById("editor"),
+
 
 {
 
@@ -214,14 +196,13 @@ fontSize:15
 }
 
 
-
 );
 
 
 
 
 
-loadQuestionCode();
+loadQuestion();
 
 
 
@@ -242,12 +223,6 @@ loadQuestionCode();
 
 
 }
-
-
-
-
-
-
 
 
 
@@ -263,27 +238,18 @@ function getStarterCode(lang){
 if(lang==="python"){
 
 
-
-return `# Python
+return `# Python 3.8
 
 nome="Maria"
 
 print(nome)
-
 `;
-
-
 
 }
 
 
 
-
-
-
-
 if(lang==="html"){
-
 
 
 return `
@@ -303,18 +269,12 @@ Minha página HTML
 
 `;
 
-
-
 }
 
 
 
 
-
-
-
 if(lang==="css"){
-
 
 
 return `
@@ -329,11 +289,7 @@ color:white;
 
 `;
 
-
-
 }
-
-
 
 
 
@@ -350,11 +306,6 @@ console.log("Olá Mundo");
 
 
 }
-
-
-
-
-
 
 
 
@@ -380,7 +331,9 @@ document.getElementById("lang");
 
 if(select){
 
+
 select.value=lang;
+
 
 }
 
@@ -411,9 +364,12 @@ lang;
 
 monaco.editor.setModelLanguage(
 
+
 App.editor.getModel(),
 
+
 editorLanguage
+
 
 );
 
@@ -426,6 +382,10 @@ editorLanguage
 
 
 }
+
+
+
+
 
 
 
@@ -566,8 +526,6 @@ showPreview(result);
 
 
 
-
-
 catch(error){
 
 
@@ -585,6 +543,10 @@ showConsole(
 
 
 }
+
+
+
+
 
 
 
@@ -620,10 +582,6 @@ consoleBox.textContent=text;
 
 
 
-
-
-
-
 function clearConsole(){
 
 
@@ -646,6 +604,8 @@ consoleBox.textContent=
 }
 
 
+
+}
 
 /*==========================================================
  PREVIEW
@@ -751,6 +711,11 @@ showConsole(
 
 
 
+
+
+
+
+
 /*==========================================================
  ABRIR PROJETO
 ==========================================================*/
@@ -817,9 +782,38 @@ return;
 
 
 
-let project =
+let project;
+
+
+
+try{
+
+
+
+project =
 
 JSON.parse(data);
+
+
+
+}
+
+catch(error){
+
+
+
+showConsole(
+
+"Projeto salvo inválido."
+
+);
+
+
+
+return;
+
+
+}
 
 
 
@@ -858,13 +852,18 @@ project.code
 
 showConsole(
 
-"Projeto carregado."
+"Projeto carregado com sucesso."
 
 );
 
 
 
 }
+
+
+
+
+
 
 
 
@@ -879,6 +878,14 @@ function downloadProject(){
 
 
 if(!App.editor){
+
+
+
+showConsole(
+
+"Editor não carregado."
+
+);
 
 
 
@@ -910,48 +917,39 @@ let file="codigo";
 if(App.language==="javascript"){
 
 
-
 file+=".js";
 
 
-
 }
-
 
 
 else if(App.language==="python"){
 
 
-
 file+=".py";
 
 
-
 }
-
 
 
 else if(App.language==="html"){
 
 
-
 file+=".html";
 
 
-
 }
-
 
 
 else if(App.language==="css"){
 
 
-
 file+=".css";
 
 
-
 }
+
+
 
 
 
@@ -975,7 +973,6 @@ type:"text/plain"
 
 
 
-
 let link =
 
 document.createElement("a");
@@ -987,7 +984,6 @@ document.createElement("a");
 link.href =
 
 URL.createObjectURL(blob);
-
 
 
 
@@ -1016,6 +1012,11 @@ URL.revokeObjectURL(link.href);
 
 
 
+
+
+
+
+
 /*==========================================================
  ESTATÍSTICAS
 ==========================================================*/
@@ -1032,6 +1033,9 @@ localStorage.getItem(
 "stats"
 
 );
+
+
+
 
 
 
@@ -1146,6 +1150,8 @@ document.getElementById(
 
 
 
+
+
 if(resolved){
 
 
@@ -1157,6 +1163,10 @@ App.resolved;
 
 
 }
+
+
+
+
 
 
 
@@ -1186,6 +1196,7 @@ saveStats();
 
 
 
+
 function completeQuestion(correct){
 
 
@@ -1208,11 +1219,16 @@ App.score++;
 
 
 
+
+
+
 updateStats();
 
 
 
 }
+
+
 
 
 
@@ -1238,9 +1254,13 @@ return;
 
 
 
+
+
 App.total =
 
 questions.length;
+
+
 
 
 
@@ -1272,6 +1292,8 @@ App.total;
 
 
 
+
+
 let q =
 
 questions[
@@ -1293,6 +1315,8 @@ return;
 
 
 }
+
+
 
 
 
@@ -1320,6 +1344,7 @@ title.textContent=
 
 
 }
+
 
 
 
@@ -1354,8 +1379,7 @@ q.title;
 
 
 
-
-setTimeout(()=>{
+if(App.editor){
 
 
 
@@ -1363,7 +1387,7 @@ loadQuestionCode();
 
 
 
-},500);
+}
 
 
 
@@ -1374,10 +1398,21 @@ loadQuestionCode();
 
 
 
-
-
-
 function loadQuestionCode(){
+
+
+
+if(typeof questions==="undefined"){
+
+
+
+return;
+
+
+}
+
+
+
 
 
 
@@ -1456,11 +1491,21 @@ q.answer
 
 
 
-
-
-
-
 function nextQuestion(){
+
+
+
+if(typeof questions==="undefined"){
+
+
+
+return;
+
+
+}
+
+
+
 
 
 
@@ -1492,7 +1537,7 @@ else{
 
 showConsole(
 
-"Última questão."
+"Você chegou ao final dos exercícios."
 
 );
 
@@ -1508,16 +1553,26 @@ showConsole(
 
 
 
-
-
-
-
 /*==========================================================
  DICA E RESPOSTA
 ==========================================================*/
 
 
 function showHint(){
+
+
+
+if(typeof questions==="undefined"){
+
+
+
+return;
+
+
+}
+
+
+
 
 
 
@@ -1528,6 +1583,7 @@ questions[
 App.currentQuestion
 
 ];
+
 
 
 
@@ -1563,6 +1619,20 @@ function showAnswer(){
 
 
 
+if(typeof questions==="undefined"){
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
 let q =
 
 questions[
@@ -1570,6 +1640,7 @@ questions[
 App.currentQuestion
 
 ];
+
 
 
 
@@ -1615,6 +1686,9 @@ changeLanguage(
 "javascript"
 
 );
+
+
+
 
 
 
