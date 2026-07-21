@@ -5,46 +5,43 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>
 PRATICANDO COM PYTHON E JAVASCRIPT
+v3.8
 </title>
+
+
+<meta name="theme-color" content="#005BAC">
 
 
 <link rel="stylesheet" href="style.css">
 
 
-
 <!-- MONACO EDITOR -->
 
-<script src="
-https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.0/min/vs/loader.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
 
 
+<!-- PYTHON 3.8 -->
 
-<!-- PYTHON -->
-
-<script src="
-https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js">
-</script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 
 
 </head>
 
 
-
 <body>
 
 
-<!--==================================================
- HEADER
-===================================================-->
+
+<!--====================================================
+ CABEÇALHO
+=====================================================-->
 
 
-<header class="header">
+<header class="top">
 
 
 <div class="logo">
@@ -58,7 +55,7 @@ https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js">
 <nav>
 
 
-<button>
+<button onclick="home()">
 🏠 Início
 </button>
 
@@ -94,13 +91,14 @@ https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js">
 
 
 <button onclick="downloadProject()">
-📥 Baixar
+⬇️ Baixar
 </button>
 
 
 <button>
-⚙ Configurações
+⚙️ Configurações
 </button>
+
 
 
 </nav>
@@ -112,29 +110,27 @@ https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js">
 
 
 
-<!--==================================================
- SISTEMA PRINCIPAL
-===================================================-->
+<!--====================================================
+ CONTAINER PRINCIPAL
+=====================================================-->
 
 
-<div class="container">
+<main class="container">
 
 
 
 
 
-<!--==================================================
- LADO ESQUERDO
-===================================================-->
+<!--====================================================
+ PAINEL ESQUERDO
+=====================================================-->
 
+<section class="left">
 
-<aside class="sidebar">
 
 
 <h2>
-
 📚 Exercícios
-
 </h2>
 
 
@@ -143,27 +139,23 @@ https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js">
 
 
 <h3>
-
 Questão 01
-
 </h3>
 
 
 <p>
-
 Crie um programa que leia dois números
 e mostre a soma.
-
 </p>
 
 
 <p>
-
 Nível:
-
+<span>
 🟢 Fácil
-
+</span>
 </p>
+
 
 
 <p>
@@ -177,6 +169,7 @@ Tempo:
 </span>
 
 </p>
+
 
 
 <p>
@@ -197,25 +190,26 @@ Pontuação:
 
 
 
-<button>
+<div class="actions">
 
+
+<button>
 💡 Dica
-
 </button>
 
 
 <button>
-
-✔ Resposta
-
+✓ Resposta
 </button>
 
 
 <button>
-
 ➡ Próxima
-
 </button>
+
+
+</div>
+
 
 
 
@@ -224,88 +218,87 @@ Pontuação:
 
 
 <h3>
-
 Categorias
-
 </h3>
 
 
-<ul>
 
-
-<li>
+<div class="category">
 Python Básico
-</li>
+</div>
 
 
-<li>
+<div class="category">
 Python Intermediário
-</li>
+</div>
 
 
-<li>
+<div class="category">
 Python Avançado
-</li>
+</div>
 
 
-<li>
+<div class="category">
 JavaScript Básico
-</li>
+</div>
 
 
-<li>
+<div class="category">
 JavaScript Avançado
-</li>
+</div>
 
 
-<li>
+<div class="category">
 HTML/CSS
-</li>
-
-
-</ul>
+</div>
 
 
 
-</aside>
+</section>
 
 
 
 
 
 
+<!--====================================================
+ CENTRO EDITOR
+=====================================================-->
 
-<!--==================================================
- CENTRO
-===================================================-->
+<section class="center">
 
-
-
-<section class="workspace">
 
 
 <div class="toolbar">
 
 
-<select id="lang" onchange="changeLanguage(this.value)">
+
+<select id="lang">
+
 
 <option value="javascript">
 🟨 JavaScript
 </option>
 
+
 <option value="python">
 🐍 Python
 </option>
+
 
 <option value="html">
 🌐 HTML
 </option>
 
+
 <option value="css">
 🎨 CSS
 </option>
 
+
+
 </select>
+
 
 
 
@@ -333,7 +326,7 @@ HTML/CSS
 
 
 
-<button>
+<button onclick="loadProject()">
 
 📂 Abrir
 
@@ -343,7 +336,7 @@ HTML/CSS
 
 <button onclick="downloadProject()">
 
-📥 Baixar
+⬇ Baixar
 
 </button>
 
@@ -355,18 +348,11 @@ HTML/CSS
 
 
 
-<!-- MONACO -->
-
-<div id="editor">
-
-</div>
+<div id="editor"></div>
 
 
 
 
-
-
-<!-- CONSOLE -->
 
 
 <div class="console">
@@ -386,7 +372,6 @@ Console pronto.
 </pre>
 
 
-
 </div>
 
 
@@ -398,14 +383,12 @@ Console pronto.
 
 
 
+<!--====================================================
+ DIREITA VISUALIZAÇÃO
+=====================================================-->
 
-<!--==================================================
- DIREITA
-===================================================-->
+<section class="right">
 
-
-
-<aside class="preview-panel">
 
 
 <h2>
@@ -416,13 +399,11 @@ Console pronto.
 
 
 
-<iframe
 
-id="preview"
+<div id="preview">
 
-sandbox="allow-scripts">
 
-</iframe>
+</div>
 
 
 
@@ -438,59 +419,88 @@ sandbox="allow-scripts">
 </h3>
 
 
+
 <p>
+
 Questões:
-<span id="questions">
+
+<span id="totalQuestions">
+
 0
+
 </span>
+
+
 </p>
 
 
+
 <p>
+
 Resolvidas:
+
 <span id="resolved">
+
 0
+
 </span>
+
+
 </p>
 
 
+
+
 <p>
+
 Acertos:
+
 <span id="correct">
+
 0
+
 </span>
+
+
 </p>
+
+
 
 
 <p>
+
 Tempo:
-<span id="studyTime">
+
+<span id="time">
+
 0h
+
 </span>
+
+
 </p>
 
 
-</div>
-
-
-
-</aside>
-
-
-
 
 </div>
 
 
 
+</section>
+
+
+
+
+</main>
 
 
 
 
 
-<!--==================================================
- MONACO CONFIG
-===================================================-->
+<!--====================================================
+ SCRIPTS
+=====================================================-->
+
 
 
 <script>
@@ -500,9 +510,8 @@ require.config({
 
 paths:{
 
-vs:
-
-"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.0/min/vs"
+'vs':
+'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs'
 
 }
 
@@ -510,38 +519,22 @@ vs:
 
 
 
-require(
-
-[
-"vs/editor/editor.main"
-],
-
-function(){
-
-
-console.log(
-"Monaco carregado"
-);
-
-
-}
-
-);
-
-
 </script>
 
 
 
+<script src="runners/javascript.js"></script>
+
+<script src="runners/python38.js"></script>
+
+<script src="runners/html.js"></script>
 
 
+<script src="questions.js"></script>
 
-<script src="jsRunner.js"></script>
-<script src="pyRunner.js"></script>
-<script src="htmlRunner.js"></script>
-<script src="storage.js"></script>
-<script src="stats.js"></script>
+
 <script src="app.js"></script>
+
 
 
 </body>
