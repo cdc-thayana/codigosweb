@@ -49,6 +49,54 @@ running:false,
 /*==========================================================
  INICIALIZAÇÃO
 ==========================================================*/
+function createEvents(){
+
+
+const runButton =
+document.getElementById("run");
+
+
+if(runButton){
+
+runButton.onclick = run;
+
+}
+
+
+
+const language =
+document.getElementById("lang");
+
+
+if(language){
+
+
+language.addEventListener(
+"change",
+function(){
+
+App.language = this.value;
+
+
+monaco.editor.setModelLanguage(
+
+App.editor.getModel(),
+
+this.value
+
+);
+
+
+console.log(
+"Linguagem:",
+App.language
+);
+
+
+});
+
+}
+
 
 
 window.addEventListener(
