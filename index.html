@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Praticando com Python e JavaScript</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#1e1e1e;color:#eee}
+header{background:#0e639c;padding:12px 18px;font-size:24px;font-weight:bold}
+.container{display:grid;grid-template-columns:260px 1fr 40%;height:calc(100vh - 56px)}
+aside{background:#252526;padding:10px;overflow:auto}
+main{display:flex;flex-direction:column}
+.toolbar{padding:8px;background:#333;display:flex;gap:8px;flex-wrap:wrap}
+button,select{padding:8px}
+textarea{flex:1;background:#1e1e1e;color:#fff;border:none;padding:12px;font-family:Consolas,monospace}
+#console{height:160px;background:#111;padding:10px;overflow:auto}
+iframe{width:100%;height:100%;border:none;background:#fff}
+@media(max-width:900px){.container{grid-template-columns:1fr;grid-template-rows:auto auto auto}iframe{height:300px}}
+</style>
+</head>
+<body>
+<header>🚀 PRATICANDO COM PYTHON E JAVASCRIPT</header>
+<div class="container">
+<aside>
+<h3>Níveis</h3>
+<ul>
+<li>Python Básico</li><li>Python Intermediário</li><li>Python Avançado</li>
+<li>JavaScript Básico</li><li>JavaScript Intermediário</li><li>JavaScript Avançado</li>
+</ul>
+<h3>Questão</h3>
+<p>Área reservada para enunciados.</p>
+</aside>
+<main>
+<div class="toolbar">
+<select id="lang"><option>JavaScript</option><option>Python (futuro Pyodide)</option><option>HTML</option></select>
+<button onclick="run()">Executar</button>
+<button onclick="save()">Salvar</button>
+<button onclick="download()">Baixar Projeto</button>
+<button onclick="clearConsole()">Limpar</button>
+</div>
+<textarea id="code"><!DOCTYPE html>
+<html>
+<body>
+<h1>Olá!</h1>
+<script>
+document.body.insertAdjacentHTML('beforeend','<p>Edite este código.</p>');
+</script>
+</body>
+</html></textarea>
+<div id="console">Console pronto.</div>
+</main>
+<div><iframe id="preview"></iframe></div>
+</div>
+<script>
+const code=document.getElementById('code');
+const preview=document.getElementById('preview');
+const consoleBox=document.getElementById('console');
+function run(){
+ if(document.getElementById('lang').value==="HTML"){
+   preview.srcdoc=code.value;
+   consoleBox.textContent="Preview atualizado.";
+ }else if(document.getElementById('lang').value==="JavaScript"){
+   let logs=[];
+   const old=console.log;
+   console.log=(...a)=>logs.push(a.join(" "));
+   try{new Function(code.value)();}catch(e){logs.push(e.toString())}
+   console.log=old;
+   consoleBox.textContent=logs.join("\n")||"Sem saída.";
+ }else{
+   consoleBox.textContent="Integração com Pyodide será adicionada no app.js.";
+ }
+}
+function save(){localStorage.setItem("ppj_code",code.value);consoleBox.textContent="Projeto salvo.";}
+function download(){
+ const blob=new Blob([code.value],{type:"text/plain"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="codigo.txt";
+ a.click();
+}
+function clearConsole(){consoleBox.textContent=""}
+code.value=localStorage.getItem("ppj_code")||code.value;
+run();
+</script>
+</body>
+</html>
