@@ -1,182 +1,197 @@
 /*==========================================================
  PRATICANDO COM PYTHON E JAVASCRIPT
+
  style.css
- Versão 2.0
- Plataforma de Estudos
-==========================================================*/
+ Versão 3.8
 
+ Interface Principal
 
-/*==========================================================
- RESET
 ==========================================================*/
 
 
 *{
-
-box-sizing:border-box;
-
-margin:0;
-
-padding:0;
-
-font-family:
-
-"Segoe UI",
-Arial,
-sans-serif;
-
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 
 
 body{
 
-background:#1e1e1e;
+    background:#101820;
+    color:#ffffff;
 
-color:#f1f1f1;
+    font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-height:100vh;
-
-overflow:hidden;
+    height:100vh;
+    overflow:hidden;
 
 }
-
 
 
 
 
 /*==========================================================
- HEADER
+ CABEÇALHO
 ==========================================================*/
 
 
-.header{
+.top{
 
-height:60px;
+    height:70px;
 
-background:#0e639c;
+    background:#005BAC;
 
-display:flex;
+    display:flex;
 
-align-items:center;
+    align-items:center;
 
-justify-content:space-between;
+    justify-content:space-between;
 
-padding:0 20px;
+    padding:0 20px;
 
-box-shadow:
-
-0 2px 8px #000;
+    box-shadow:
+    0 2px 10px #000;
 
 }
-
 
 
 
 .logo{
 
-font-size:22px;
+    font-size:20px;
 
-font-weight:bold;
+    font-weight:bold;
 
-white-space:nowrap;
-
-}
-
-
-
-
-
-.header nav{
-
-display:flex;
-
-gap:8px;
-
-flex-wrap:wrap;
+    white-space:nowrap;
 
 }
 
 
 
-button{
+nav{
 
-background:#007acc;
+    display:flex;
 
-border:none;
-
-color:white;
-
-padding:8px 12px;
-
-border-radius:5px;
-
-cursor:pointer;
-
-font-size:14px;
-
-transition:.2s;
+    gap:8px;
 
 }
 
 
 
-button:hover{
+nav button{
 
-background:#0098ff;
+    background:#0b72c9;
 
-transform:translateY(-1px);
+    border:none;
 
-}
+    color:white;
 
+    padding:10px 12px;
 
+    border-radius:6px;
 
+    cursor:pointer;
 
-
-select{
-
-background:#252526;
-
-color:white;
-
-border:1px solid #555;
-
-padding:8px;
-
-border-radius:5px;
+    font-size:13px;
 
 }
 
 
 
+nav button:hover{
+
+    background:#083f73;
+
+}
 
 
 
 
 /*==========================================================
- GRID PRINCIPAL
+ CONTAINER PRINCIPAL
 ==========================================================*/
 
 
 .container{
 
-display:grid;
+
+    height:
+    calc(100vh - 70px);
 
 
-grid-template-columns:
-
-280px
-
-1fr
-
-380px;
+    display:grid;
 
 
+    grid-template-columns:
 
-height:
+    280px
 
-calc(100vh - 60px);
+    1fr
 
+    300px;
+
+
+    gap:10px;
+
+
+    padding:10px;
+
+
+}
+
+
+
+
+/*==========================================================
+ PAINÉIS
+==========================================================*/
+
+
+.left,
+.center,
+.right{
+
+
+    background:#18232e;
+
+
+    border-radius:10px;
+
+
+    padding:15px;
+
+
+    overflow:hidden;
+
+
+    box-shadow:
+
+    0 0 10px #000;
+
+
+}
+
+
+
+
+h2{
+
+    margin-bottom:15px;
+
+    color:#00b7ff;
+
+}
+
+
+
+h3{
+
+    color:#00d4ff;
 
 }
 
@@ -185,159 +200,128 @@ calc(100vh - 60px);
 
 
 /*==========================================================
- SIDEBAR ESQUERDO
+ PAINEL ESQUERDO
 ==========================================================*/
 
 
-.sidebar{
+.left{
 
 
-background:#252526;
-
-
-padding:15px;
-
-
-overflow:auto;
-
-
-border-right:1px solid #333;
+    overflow-y:auto;
 
 
 }
 
-
-
-.sidebar h2{
-
-
-color:#4fc3f7;
-
-margin-bottom:15px;
-
-
-}
-
-
-
-.sidebar h3{
-
-margin-bottom:10px;
-
-}
-
-
-
-.sidebar ul{
-
-list-style:none;
-
-}
-
-
-
-.sidebar li{
-
-
-padding:8px;
-
-
-background:#333;
-
-
-margin-bottom:6px;
-
-
-border-radius:5px;
-
-
-cursor:pointer;
-
-
-}
-
-
-
-.sidebar li:hover{
-
-
-background:#094771;
-
-
-}
-
-
-
-
-
-
-/*==========================================================
- CARD QUESTÃO
-==========================================================*/
 
 
 .question{
 
 
-background:#333;
+    background:#101820;
 
 
-padding:15px;
+    border-radius:8px;
 
 
-border-radius:10px;
+    padding:15px;
 
 
-margin-bottom:15px;
-
-
-}
-
-
-
-.question h3{
-
-
-color:#4fc3f7;
-
-
-margin-bottom:10px;
+    margin-bottom:15px;
 
 
 }
 
 
 
-.question p{
+.question span{
 
 
-margin:8px 0;
+    color:#00ff99;
 
 
-}
-
-
-
-#timer{
-
-
-color:#ffd54f;
-
-
-font-weight:bold;
+    font-weight:bold;
 
 
 }
 
 
 
-#score{
+
+.actions{
 
 
-color:#81c784;
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
 
 
-font-weight:bold;
+}
+
+
+
+.actions button{
+
+
+    background:#005BAC;
+
+
+    border:none;
+
+
+    color:white;
+
+
+    padding:8px 12px;
+
+
+    border-radius:6px;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+.actions button:hover{
+
+
+    background:#0088ff;
+
+
+}
+
+
+
+.category{
+
+
+    background:#243443;
+
+
+    padding:10px;
+
+
+    margin:5px 0;
+
+
+    border-radius:6px;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+.category:hover{
+
+
+    background:#005BAC;
 
 
 }
@@ -349,82 +333,94 @@ font-weight:bold;
 
 
 /*==========================================================
- ÁREA CENTRAL
+ CENTRO EDITOR
 ==========================================================*/
 
 
-.workspace{
+.center{
 
 
-display:flex;
+    display:flex;
 
 
-flex-direction:column;
-
-
-background:#1e1e1e;
+    flex-direction:column;
 
 
 }
 
-
-
-
-
-/*==========================================================
- TOOLBAR
-==========================================================*/
 
 
 .toolbar{
 
 
-height:50px;
+    display:flex;
 
 
-background:#333;
+    gap:8px;
 
 
-display:flex;
+    margin-bottom:10px;
 
 
-align-items:center;
-
-
-gap:8px;
-
-
-padding:8px;
-
-
-flex-wrap:wrap;
+    flex-wrap:wrap;
 
 
 }
 
 
 
+.toolbar select,
+.toolbar button{
 
-/*==========================================================
- MONACO
-==========================================================*/
+
+    background:#005BAC;
+
+
+    border:none;
+
+
+    color:white;
+
+
+    padding:8px 12px;
+
+
+    border-radius:6px;
+
+
+    cursor:pointer;
+
+
+}
+
+
+
+.toolbar select{
+
+
+    background:#202f3d;
+
+
+}
+
+
 
 
 #editor{
 
 
-flex:1;
+    flex:1;
 
 
-min-height:300px;
+    min-height:350px;
 
 
-border-top:1px solid #333;
+    border:
+
+    1px solid #333;
 
 
 }
-
-
 
 
 
@@ -437,34 +433,22 @@ border-top:1px solid #333;
 .console{
 
 
-height:180px;
+    height:170px;
 
 
-background:#111;
+    margin-top:10px;
 
 
-border-top:
-
-1px solid #333;
+    background:#050505;
 
 
-padding:10px;
+    border-radius:8px;
 
 
-overflow:auto;
+    padding:10px;
 
 
-}
-
-
-
-.console h3{
-
-
-color:#4fc3f7;
-
-
-margin-bottom:8px;
+    overflow:auto;
 
 
 }
@@ -474,20 +458,20 @@ margin-bottom:8px;
 #consoleOutput{
 
 
-font-family:
-
-Consolas,
-monospace;
+    color:#00ff99;
 
 
-color:#00ff90;
+    font-family:
+
+    Consolas,
+
+    monospace;
 
 
-white-space:pre-wrap;
+    white-space:pre-wrap;
 
 
 }
-
 
 
 
@@ -495,102 +479,62 @@ white-space:pre-wrap;
 
 
 /*==========================================================
- PREVIEW
+ DIREITA VISUALIZAÇÃO
 ==========================================================*/
 
 
-.preview-panel{
+.right{
 
 
-background:#252526;
+    display:flex;
 
 
-padding:15px;
-
-
-border-left:1px solid #333;
-
-
-display:flex;
-
-
-flex-direction:column;
+    flex-direction:column;
 
 
 }
 
 
 
-.preview-panel h2{
+#preview{
 
 
-color:#4fc3f7;
+    background:white;
 
 
-margin-bottom:10px;
+    color:black;
 
 
-}
+    flex:1;
 
 
+    border-radius:8px;
 
 
-
-iframe{
-
-
-flex:1;
+    overflow:auto;
 
 
-width:100%;
-
-
-background:white;
-
-
-border-radius:8px;
-
-
-border:none;
+    padding:10px;
 
 
 }
 
 
-
-
-
-/*==========================================================
- ESTATÍSTICAS
-==========================================================*/
 
 
 .stats{
 
 
-background:#333;
+    background:#101820;
 
 
-margin-top:15px;
+    margin-top:15px;
 
 
-padding:15px;
+    padding:15px;
 
 
-border-radius:10px;
-
-
-}
-
-
-
-.stats h3{
-
-
-color:#ffd54f;
-
-
-margin-bottom:10px;
+    border-radius:8px;
 
 
 }
@@ -600,7 +544,7 @@ margin-bottom:10px;
 .stats p{
 
 
-padding:5px;
+    margin:10px 0;
 
 
 }
@@ -610,17 +554,13 @@ padding:5px;
 .stats span{
 
 
-float:right;
+    color:#00ff99;
 
 
-color:#81c784;
-
-
-font-weight:bold;
+    font-weight:bold;
 
 
 }
-
 
 
 
@@ -635,17 +575,7 @@ font-weight:bold;
 ::-webkit-scrollbar{
 
 
-width:8px;
-
-
-}
-
-
-
-::-webkit-scrollbar-track{
-
-
-background:#1e1e1e;
+    width:8px;
 
 
 }
@@ -655,10 +585,10 @@ background:#1e1e1e;
 ::-webkit-scrollbar-thumb{
 
 
-background:#555;
+    background:#005BAC;
 
 
-border-radius:10px;
+    border-radius:5px;
 
 
 }
@@ -668,13 +598,12 @@ border-radius:10px;
 
 
 
-
 /*==========================================================
- RESPONSIVO
+ RESPONSIVIDADE
 ==========================================================*/
 
 
-@media(max-width:1200px){
+@media(max-width:1100px){
 
 
 .container{
@@ -682,7 +611,7 @@ border-radius:10px;
 
 grid-template-columns:
 
-240px
+250px
 
 1fr;
 
@@ -691,7 +620,7 @@ grid-template-columns:
 
 
 
-.preview-panel{
+.right{
 
 
 display:none;
@@ -705,19 +634,45 @@ display:none;
 
 
 
-@media(max-width:800px){
-
+@media(max-width:750px){
 
 
 body{
 
+
 overflow:auto;
+
 
 }
 
 
 
-.header{
+.container{
+
+
+height:auto;
+
+
+display:block;
+
+
+}
+
+
+
+.left,
+.center,
+.right{
+
+
+margin-bottom:10px;
+
+
+}
+
+
+
+.top{
 
 
 height:auto;
@@ -736,39 +691,13 @@ padding:15px;
 
 
 
-.container{
+nav{
 
 
-display:flex;
+flex-wrap:wrap;
 
 
-flex-direction:column;
-
-
-height:auto;
-
-
-}
-
-
-
-.sidebar{
-
-
-order:1;
-
-
-}
-
-
-
-.workspace{
-
-
-order:2;
-
-
-height:600px;
+justify-content:center;
 
 
 }
