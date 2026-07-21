@@ -2,7 +2,7 @@
  PRATICANDO COM PYTHON E JAVASCRIPT
 
  app.js
- Versão 3.0
+ Versão 3.8
 
  Controlador Principal
 
@@ -21,22 +21,25 @@
 const App = {
 
 
-version:"3.0",
+    version:"3.8",
 
 
-language:"javascript",
+    language:"javascript",
 
 
-editor:null,
+    editor:null,
 
 
-projectName:"Projeto Novo",
+    currentQuestion:0,
 
 
-autoSave:true,
+    score:0,
 
 
-running:false,
+    resolved:0,
+
+
+    total:0
 
 
 };
@@ -49,94 +52,25 @@ running:false,
 /*==========================================================
  INICIALIZAÇÃO
 ==========================================================*/
-function createEvents(){
 
 
-const runButton =
-document.getElementById("run");
+window.onload=function(){
 
 
-if(runButton){
-
-runButton.onclick = run;
-
-}
+    initMonaco();
 
 
-
-const language =
-document.getElementById("lang");
+    loadStats();
 
 
-if(language){
+    loadQuestion();
 
 
-language.addEventListener(
-"change",
-function(){
-
-App.language = this.value;
-
-
-monaco.editor.setModelLanguage(
-
-App.editor.getModel(),
-
-this.value
-
-);
-
-
-console.log(
-"Linguagem:",
-App.language
-);
-
-
-});
-
-}
-
-
-
-window.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-
-initialize();
-
-
-});
+};
 
 
 
 
-
-function initialize(){
-
-
-
-console.log(
-
-"🚀 Plataforma iniciada"
-
-);
-
-
-
-createEditor();
-
-
-loadProject();
-
-
-createEvents();
-
-
-}
 
 
 
@@ -146,64 +80,53 @@ createEvents();
 ==========================================================*/
 
 
-function createEditor(){
+function initMonaco(){
 
 
 
 require(
+{
 
+paths:
+{
+vs:
+"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+}
+
+},
+
+function(){
+
+
+require(
 [
-
 "vs/editor/editor.main"
-
 ],
-
 
 function(){
 
 
 
-App.editor =
+App.editor = monaco.editor.create(
 
-monaco.editor.create(
-
-document.getElementById(
-
-"editor"
-
-),
-
+document.getElementById("editor"),
 
 {
 
 
-value:getDefaultCode(),
+value:getStarterCode("javascript"),
 
 
-language:
-
-App.language,
+language:"javascript",
 
 
-theme:
-
-"vs-dark",
+theme:"vs-dark",
 
 
 automaticLayout:true,
 
 
-fontSize:15,
-
-
-minimap:
-
-{
-
-enabled:false
-
-}
-
+fontSize:15
 
 
 }
@@ -216,6 +139,7 @@ enabled:false
 
 });
 
+});
 
 
 }
@@ -223,103 +147,120 @@ enabled:false
 
 
 
-function getDefaultCode(){
-
-
-return `
-
-console.log("Olá mundo");
-
-`;
-
-
-
-}
 
 
 
 
 /*==========================================================
- TROCA DE LINGUAGEM
+ CÓDIGOS INICIAIS
 ==========================================================*/
 
 
-function changeLanguage(language){
+function getStarterCode(lang){
+
+
+if(lang==="python"){
+
+
+return `# Python 3.8
+
+nome="Maria"
+
+print(nome)
+`;
+
+}
 
 
 
-App.language = language;
+if(lang==="html"){
+
+
+return `
+
+<h1>
+Olá Mundo
+</h1>
+
+<p>
+Minha página HTML
+</p>
+
+`;
+
+}
 
 
 
-let model =
 
-App.editor.getModel();
+if(lang==="css"){
+
+
+return `
+
+body{
+
+background:black;
+color:white;
+
+}
+
+`;
+
+}
+
+
+
+return `
+
+// JavaScript
+
+console.log("Olá Mundo");
+
+`;
+
+}
+
+
+
+
+
+
+
+
+
+/*==========================================================
+ TROCAR LINGUAGEM
+==========================================================*/
+
+
+function changeLanguage(lang){
+
+
+App.language=lang;
+
+
+document.getElementById("lang").value=lang;
+
+
+
+if(App.editor){
 
 
 
 monaco.editor.setModelLanguage(
 
-model,
+App.editor.getModel(),
 
-language
-
-);
-
-
-
-switch(language){
-
-
-
-case"python":
-
-
-App.editor.setValue(
-
-'print("Olá Python")'
+lang==="python"?"python":lang
 
 );
 
 
-break;
-
-
-
-case"html":
-
 
 App.editor.setValue(
 
-"<h1>Minha Página</h1>"
-
-);
-
-
-break;
-
-
-
-case"css":
-
-
-App.editor.setValue(
-
-"body{background:red;}"
-
-);
-
-
-break;
-
-
-
-default:
-
-
-App.editor.setValue(
-
-'console.log("Olá JavaScript");'
+getStarterCode(lang)
 
 );
 
@@ -329,8 +270,35 @@ App.editor.setValue(
 
 
 
+}
+
+
+
+
+
+
+
+
+document
+.getElementById("lang")
+.addEventListener(
+
+"change",
+
+function(){
+
+
+changeLanguage(this.value);
+
 
 }
+
+);
+
+
+
+
+
 
 
 
@@ -340,17 +308,29 @@ App.editor.setValue(
 ==========================================================*/
 
 
-async function run(){
+document
+.getElementById("run")
+.onclick=function(){
+
+
+executeCode();
+
+
+};
 
 
 
-if(App.running)
-
-return;
 
 
 
-App.running=true;
+
+
+
+async function executeCode(){
+
+
+
+let code=App.editor.getValue();
 
 
 
@@ -358,72 +338,20 @@ clearConsole();
 
 
 
-let code =
-
-App.editor.getValue();
-
-
-
-let result;
-
-
-
 try{
 
 
 
-switch(App.language){
+if(App.language==="python"){
 
 
 
-case"javascript":
-
-
-result =
-
-JSRunner.execute(code);
-
-
-break;
+let result=
+await runPython(code);
 
 
 
-
-case"python":
-
-
-result =
-
-await PythonRunner.execute(code);
-
-
-break;
-
-
-
-
-case"html":
-
-
-result =
-
-HTMLRunner.execute(code);
-
-
-break;
-
-
-
-
-case"css":
-
-
-result =
-
-HTMLRunner.executeCSS(code);
-
-
-break;
+showConsole(result);
 
 
 
@@ -431,8 +359,40 @@ break;
 
 
 
+else if(App.language==="javascript"){
 
-writeConsole(result);
+
+
+let result=
+runJavaScript(code);
+
+
+
+showConsole(result);
+
+
+
+}
+
+
+
+else if(
+App.language==="html" ||
+App.language==="css"
+){
+
+
+
+let result=
+runHTML(code);
+
+
+
+showPreview(result);
+
+
+
+}
 
 
 
@@ -442,9 +402,9 @@ catch(error){
 
 
 
-writeConsole(
+showConsole(
 
-"❌ "+error.message
+"Erro:\n"+error
 
 );
 
@@ -454,11 +414,11 @@ writeConsole(
 
 
 
-App.running=false;
-
-
-
 }
+
+
+
+
 
 
 
@@ -469,51 +429,24 @@ App.running=false;
 ==========================================================*/
 
 
-function writeConsole(text){
+function showConsole(text){
 
 
-
-const box =
-
-document.getElementById(
-
-"consoleOutput"
-
-);
-
-
-
-if(box)
-
-box.textContent +=
-
-text+"\n";
-
+document
+.getElementById("consoleOutput")
+.textContent=text;
 
 
 }
-
 
 
 
 function clearConsole(){
 
 
-
-const box=
-
-document.getElementById(
-
-"consoleOutput"
-
-);
-
-
-
-if(box)
-
-box.textContent="";
-
+document
+.getElementById("consoleOutput")
+.textContent="Console limpo.";
 
 
 }
@@ -521,58 +454,72 @@ box.textContent="";
 
 
 
+
+
+
+
+
 /*==========================================================
- SALVAR
+ PREVIEW
+==========================================================*/
+
+
+function showPreview(html){
+
+
+document
+.getElementById("preview")
+.innerHTML=html;
+
+
+}
+
+
+
+
+
+
+
+
+
+/*==========================================================
+ SALVAR PROJETO
 ==========================================================*/
 
 
 function saveProject(){
 
 
-
-let project={
-
-
-
-name:
-
-App.projectName,
-
-
-language:
-
-App.language,
-
-
-code:
-
-App.editor.getValue(),
-
-
-date:
-
-new Date().toISOString()
-
-
-
-};
+if(!App.editor)return;
 
 
 
 localStorage.setItem(
 
-"PPJ_PROJECT",
+"codigoWeb",
 
-JSON.stringify(project)
+JSON.stringify(
+
+{
+
+
+language:App.language,
+
+
+code:App.editor.getValue()
+
+
+}
+
+
+)
 
 );
 
 
 
-writeConsole(
-
-"💾 Projeto salvo"
-
+showConsole(
+"Projeto salvo com sucesso."
 );
 
 
@@ -583,8 +530,12 @@ writeConsole(
 
 
 
+
+
+
+
 /*==========================================================
- CARREGAR
+ ABRIR PROJETO
 ==========================================================*/
 
 
@@ -592,19 +543,23 @@ function loadProject(){
 
 
 
-let data =
+let data=
 
 localStorage.getItem(
-
-"PPJ_PROJECT"
-
+"codigoWeb"
 );
 
 
 
-if(!data)
+if(!data){
+
+showConsole(
+"Nenhum projeto salvo."
+);
 
 return;
+
+}
 
 
 
@@ -614,30 +569,28 @@ JSON.parse(data);
 
 
 
-App.language=
-
-project.language;
-
-
-
-setTimeout(()=>{
-
-
-if(App.editor)
-
-App.editor.setValue(
-
-project.code
-
+changeLanguage(
+project.language
 );
 
 
 
-},1000);
+App.editor.setValue(
+project.code
+);
+
+
+
+showConsole(
+"Projeto carregado."
+);
 
 
 
 }
+
+
+
 
 
 
@@ -645,37 +598,7 @@ project.code
 
 
 /*==========================================================
- NOVO PROJETO
-==========================================================*/
-
-
-function newProject(){
-
-
-if(confirm(
-
-"Criar novo projeto?"
-
-)){
-
-
-App.editor.setValue("");
-
-clearConsole();
-
-
-}
-
-
-
-}
-
-
-
-
-
-/*==========================================================
- DOWNLOAD
+ BAIXAR CÓDIGO
 ==========================================================*/
 
 
@@ -683,47 +606,55 @@ function downloadProject(){
 
 
 
-const code =
-
+let code=
 App.editor.getValue();
 
 
 
-const file =
+let file="codigo."+App.language;
 
+
+
+if(App.language==="javascript")
+file+=".js";
+
+
+if(App.language==="python")
+file+=".py";
+
+
+if(
+App.language==="html"
+)
+file+=".html";
+
+
+
+
+let blob=
 new Blob(
 
 [code],
 
 {
-
 type:"text/plain"
-
 }
 
 );
 
 
 
-const link=
-
-document.createElement(
-
-"a"
-
-);
+let link=
+document.createElement("a");
 
 
 
 link.href=
-
-URL.createObjectURL(file);
-
+URL.createObjectURL(blob);
 
 
-link.download=
 
-"Projeto_codigo.txt";
+link.download=file;
 
 
 
@@ -737,28 +668,44 @@ link.click();
 
 
 
+
+
+
+
 /*==========================================================
- EVENTOS
+ ESTATÍSTICAS
 ==========================================================*/
 
 
-function createEvents(){
+function loadStats(){
 
 
-
-const buttonRun=
-
-document.getElementById(
-
-"run"
-
+let saved=
+localStorage.getItem(
+"stats"
 );
 
 
 
-if(buttonRun)
+if(saved){
 
-buttonRun.onclick=run;
+
+let s=
+JSON.parse(saved);
+
+
+
+App.score=s.score||0;
+
+
+App.resolved=s.resolved||0;
+
+
+}
+
+
+
+updateStats();
 
 
 
@@ -767,37 +714,120 @@ buttonRun.onclick=run;
 
 
 
+
+function updateStats(){
+
+
+
+document
+.getElementById("resolved")
+.textContent=
+App.resolved;
+
+
+
+document
+.getElementById("correct")
+.textContent=
+App.score;
+
+
+
+}
+
+
+
+
+
+
+
+
 /*==========================================================
- EXPORTAR
+ EXERCÍCIOS
 ==========================================================*/
 
 
-window.App=App;
+function loadQuestion(){
 
 
-window.run=run;
+if(
+typeof questions==="undefined"
+)
+return;
 
 
-window.saveProject=
 
-saveProject;
-
-
-window.downloadProject=
-
-downloadProject;
+App.total=
+questions.length;
 
 
-window.clearConsole=
 
-clearConsole;
-
-
-window.changeLanguage=
-
-changeLanguage;
+document
+.getElementById("totalQuestions")
+.textContent=
+App.total;
 
 
-window.newProject=
 
-newProject;
+let q=
+questions[
+App.currentQuestion
+];
+
+
+
+if(!q)return;
+
+
+
+document.querySelector(".question h3")
+.textContent=
+"Questão "+
+(q.id);
+
+
+
+document.querySelector(".question p")
+.textContent=
+q.title;
+
+
+
+}
+
+
+
+
+
+function nextQuestion(){
+
+
+if(
+App.currentQuestion <
+questions.length-1
+){
+
+
+App.currentQuestion++;
+
+
+loadQuestion();
+
+
+
+}
+
+
+}
+
+
+
+
+
+function home(){
+
+
+changeLanguage("javascript");
+
+
+}
