@@ -189,9 +189,6 @@ fontSize:15
 
 
 
-loadQuestion();
-
-
 
 }
 
