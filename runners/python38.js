@@ -13,11 +13,10 @@
 
 
 
-let pyodideReady = false;
-
-
 let pyodideInstance = null;
 
+
+let pythonLoaded = false;
 
 
 
@@ -34,17 +33,31 @@ async function loadPython(){
 
 
 
-if(pyodideReady){
+if(pythonLoaded){
+
+    return;
+
+}
 
 
-return;
+
+
+if(typeof loadPyodide === "undefined"){
+
+
+    throw new Error(
+
+    "Pyodide ainda não carregou."
+
+    );
 
 
 }
 
 
 
-try{
+
+
 
 
 showConsole(
@@ -53,37 +66,28 @@ showConsole(
 
 
 
+
+
+
 pyodideInstance = await loadPyodide();
 
 
 
-pyodideReady=true;
+
+
+pythonLoaded=true;
+
+
+
 
 
 
 showConsole(
-"Python carregado com sucesso."
-);
 
-
-
-}
-
-
-
-catch(error){
-
-
-showConsole(
-
-"Erro ao carregar Python:\n"+
-error
+"Python carregado."
 
 );
 
-
-
-}
 
 
 
@@ -106,14 +110,20 @@ async function runPython(code){
 
 
 
-if(!pyodideReady){
+try{
+
+
+
+if(!pythonLoaded){
 
 
 await loadPython();
 
 
-
 }
+
+
+
 
 
 
@@ -121,15 +131,13 @@ let output="";
 
 
 
-try{
+
 
 
 
 pyodideInstance.setStdout({
 
-batched:
-
-(text)=>{
+batched(text){
 
 
 output += text + "\n";
@@ -143,14 +151,25 @@ output += text + "\n";
 
 
 
+
+
+
 pyodideInstance.setStderr({
 
-batched:
-
-(text)=>{
+batched(text){
 
 
-output += "Erro: "+text+"\n";
+output +=
+
+"Erro: "
+
++
+
+text
+
++
+
+"\n";
 
 
 }
@@ -163,17 +182,28 @@ output += "Erro: "+text+"\n";
 
 
 
+
 await pyodideInstance.runPythonAsync(code);
 
 
 
-if(output===""){
+
+
+
+
+if(output.trim()===""){
 
 
 output=
+
 "Programa executado sem saída.";
 
+
 }
+
+
+
+
 
 
 
@@ -181,9 +211,9 @@ return output;
 
 
 
+
+
 }
-
-
 
 catch(error){
 
@@ -191,8 +221,11 @@ catch(error){
 
 return (
 
-"Erro Python:\n"+
-error
+"Erro Python:\n"
+
++
+
+error.message
 
 );
 
@@ -203,24 +236,3 @@ error
 
 
 }
-
-
-
-
-
-
-
-
-
-/*==========================================================
- EXEMPLO PYTHON
-==========================================================*/
-
-
-const pythonExample = `
-
-nome="Aluno"
-
-print("Olá",nome)
-
-`;
