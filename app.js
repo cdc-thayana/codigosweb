@@ -2,7 +2,7 @@
  PRATICANDO COM PYTHON E JAVASCRIPT
 
  app.js
- Versão 3.8
+ Versão 3.8.1
 
  Controlador Principal
 
@@ -21,7 +21,7 @@
 const App = {
 
 
-    version:"3.8",
+    version:"3.8.1",
 
 
     language:"javascript",
@@ -49,6 +49,8 @@ const App = {
 
 
 
+
+
 /*==========================================================
  INICIALIZAÇÃO
 ==========================================================*/
@@ -57,16 +59,83 @@ const App = {
 window.onload=function(){
 
 
+
     initMonaco();
+
 
 
     loadStats();
 
 
+
     loadQuestion();
 
 
+
+
+
+
+
+    const languageSelect =
+
+    document.getElementById("lang");
+
+
+
+
+    if(languageSelect){
+
+
+
+        languageSelect.addEventListener(
+
+            "change",
+
+            function(){
+
+
+                changeLanguage(this.value);
+
+
+            }
+
+        );
+
+    }
+
+
+
+
+
+
+
+    const runButton =
+
+    document.getElementById("run");
+
+
+
+
+    if(runButton){
+
+
+
+        runButton.onclick=function(){
+
+
+            executeCode();
+
+
+        };
+
+
+    }
+
+
+
 };
+
+
 
 
 
@@ -85,22 +154,35 @@ function initMonaco(){
 
 
 require(
+
 {
 
+
 paths:
+
 {
+
+
 vs:
+
 "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+
+
 }
+
 
 },
 
 function(){
 
 
+
 require(
+
 [
+
 "vs/editor/editor.main"
+
 ],
 
 function(){
@@ -137,12 +219,30 @@ fontSize:15
 
 
 
-});
 
-});
+
+loadQuestionCode();
+
 
 
 }
+
+
+
+);
+
+
+
+}
+
+
+
+);
+
+
+
+}
+
 
 
 
@@ -159,36 +259,56 @@ fontSize:15
 function getStarterCode(lang){
 
 
+
 if(lang==="python"){
 
 
-return `# Python 3.8
+
+return `# Python
 
 nome="Maria"
 
 print(nome)
+
 `;
 
+
+
 }
+
+
+
+
 
 
 
 if(lang==="html"){
 
 
+
 return `
 
 <h1>
+
 Olá Mundo
+
 </h1>
 
+
 <p>
+
 Minha página HTML
+
 </p>
 
 `;
 
+
+
 }
+
+
+
 
 
 
@@ -196,18 +316,26 @@ Minha página HTML
 if(lang==="css"){
 
 
+
 return `
 
 body{
 
 background:black;
+
 color:white;
 
 }
 
 `;
 
+
+
 }
+
+
+
+
 
 
 
@@ -218,6 +346,8 @@ return `
 console.log("Olá Mundo");
 
 `;
+
+
 
 }
 
@@ -237,10 +367,25 @@ console.log("Olá Mundo");
 function changeLanguage(lang){
 
 
+
 App.language=lang;
 
 
-document.getElementById("lang").value=lang;
+
+const select =
+
+document.getElementById("lang");
+
+
+
+if(select){
+
+select.value=lang;
+
+}
+
+
+
 
 
 
@@ -248,21 +393,31 @@ if(App.editor){
 
 
 
+let editorLanguage =
+
+lang==="python"
+
+?
+
+"python"
+
+:
+
+lang;
+
+
+
+
+
 monaco.editor.setModelLanguage(
 
 App.editor.getModel(),
 
-lang==="python"?"python":lang
+editorLanguage
 
 );
 
 
-
-App.editor.setValue(
-
-getStarterCode(lang)
-
-);
 
 
 
@@ -271,70 +426,54 @@ getStarterCode(lang)
 
 
 }
-
-
-
-
-
-
-
-
-document
-.getElementById("lang")
-.addEventListener(
-
-"change",
-
-function(){
-
-
-changeLanguage(this.value);
-
-
-}
-
-);
-
-
-
-
 
 
 
 
 
 /*==========================================================
- EXECUTAR
+ EXECUTAR CÓDIGO
 ==========================================================*/
-
-
-document
-.getElementById("run")
-.onclick=function(){
-
-
-executeCode();
-
-
-};
-
-
-
-
-
-
-
 
 
 async function executeCode(){
 
 
 
-let code=App.editor.getValue();
+if(!App.editor){
+
+
+
+showConsole(
+
+"Editor carregando..."
+
+);
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+let code =
+
+App.editor.getValue();
+
+
 
 
 
 clearConsole();
+
+
+
 
 
 
@@ -346,7 +485,8 @@ if(App.language==="python"){
 
 
 
-let result=
+let result =
+
 await runPython(code);
 
 
@@ -359,11 +499,15 @@ showConsole(result);
 
 
 
+
+
+
 else if(App.language==="javascript"){
 
 
 
-let result=
+let result =
+
 runJavaScript(code);
 
 
@@ -376,14 +520,36 @@ showConsole(result);
 
 
 
-else if(
-App.language==="html" ||
-App.language==="css"
-){
 
 
 
-let result=
+else if(App.language==="html"){
+
+
+
+let result =
+
+runHTML(code);
+
+
+
+showPreview(result);
+
+
+
+}
+
+
+
+
+
+
+else if(App.language==="css"){
+
+
+
+let result =
+
 runCSS(code);
 
 
@@ -398,13 +564,17 @@ showPreview(result);
 
 }
 
+
+
+
+
 catch(error){
 
 
 
 showConsole(
 
-"Erro:\n"+error
+"Erro:\n"+error.message
 
 );
 
@@ -420,10 +590,6 @@ showConsole(
 
 
 
-
-
-
-
 /*==========================================================
  CONSOLE
 ==========================================================*/
@@ -432,30 +598,52 @@ showConsole(
 function showConsole(text){
 
 
-document
-.getElementById("consoleOutput")
-.textContent=text;
+
+let consoleBox =
+
+document.getElementById("consoleOutput");
+
+
+
+if(consoleBox){
+
+
+
+consoleBox.textContent=text;
 
 
 }
+
+
+
+}
+
+
+
+
 
 
 
 function clearConsole(){
 
 
-document
-.getElementById("consoleOutput")
-.textContent="Console limpo.";
+
+let consoleBox =
+
+document.getElementById("consoleOutput");
+
+
+
+if(consoleBox){
+
+
+
+consoleBox.textContent=
+
+"Console limpo.";
 
 
 }
-
-
-
-
-
-
 
 
 
@@ -467,9 +655,20 @@ document
 function showPreview(html){
 
 
-document
-.getElementById("preview")
-.innerHTML=html;
+let preview =
+
+document.getElementById("preview");
+
+
+
+if(preview){
+
+
+preview.innerHTML = html;
+
+
+}
+
 
 
 }
@@ -490,17 +689,36 @@ document
 function saveProject(){
 
 
-if(!App.editor)return;
+
+if(!App.editor){
+
+
+
+showConsole(
+
+"Editor não carregado."
+
+);
+
+
+
+return;
+
+
+}
+
+
+
 
 
 
 localStorage.setItem(
 
+
 "codigoWeb",
 
-JSON.stringify(
 
-{
+JSON.stringify({
 
 
 language:App.language,
@@ -509,27 +727,26 @@ language:App.language,
 code:App.editor.getValue()
 
 
-}
 
+})
 
-)
 
 );
+
+
+
 
 
 
 showConsole(
+
 "Projeto salvo com sucesso."
+
 );
 
 
 
 }
-
-
-
-
-
 
 
 
@@ -543,56 +760,111 @@ function loadProject(){
 
 
 
-let data=
+let data =
 
 localStorage.getItem(
+
 "codigoWeb"
+
 );
+
+
+
 
 
 
 if(!data){
 
+
+
 showConsole(
+
 "Nenhum projeto salvo."
+
 );
 
+
+
 return;
+
 
 }
 
 
 
-let project=
+
+
+
+if(!App.editor){
+
+
+
+showConsole(
+
+"Editor ainda carregando."
+
+);
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+let project =
 
 JSON.parse(data);
 
 
 
+
+
+
 changeLanguage(
+
 project.language
+
 );
+
+
+
+
+
+
+setTimeout(()=>{
 
 
 
 App.editor.setValue(
+
 project.code
+
 );
 
 
 
+},200);
+
+
+
+
+
+
 showConsole(
+
 "Projeto carregado."
+
 );
 
 
 
 }
-
-
-
-
-
 
 
 
@@ -606,64 +878,118 @@ function downloadProject(){
 
 
 
-let code=
+if(!App.editor){
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+let code =
+
 App.editor.getValue();
 
 
 
-let file = "codigo";
 
 
-if(App.language === "javascript"){
-
-    file += ".js";
-
-}
+let file="codigo";
 
 
-else if(App.language === "python"){
-
-    file += ".py";
-
-}
 
 
-else if(App.language === "html"){
-
-    file += ".html";
-
-}
 
 
-else if(App.language === "css"){
+if(App.language==="javascript"){
 
-    file += ".css";
+
+
+file+=".js";
+
+
 
 }
 
 
 
+else if(App.language==="python"){
 
-let blob=
+
+
+file+=".py";
+
+
+
+}
+
+
+
+else if(App.language==="html"){
+
+
+
+file+=".html";
+
+
+
+}
+
+
+
+else if(App.language==="css"){
+
+
+
+file+=".css";
+
+
+
+}
+
+
+
+
+let blob =
+
 new Blob(
 
 [code],
 
 {
+
 type:"text/plain"
+
 }
 
 );
 
 
 
-let link=
+
+
+
+
+let link =
+
 document.createElement("a");
 
 
 
-link.href=
+
+
+link.href =
+
 URL.createObjectURL(blob);
+
+
+
 
 
 
@@ -671,16 +997,21 @@ link.download=file;
 
 
 
+
+
+
 link.click();
 
 
 
+
+
+
+URL.revokeObjectURL(link.href);
+
+
+
 }
-
-
-
-
-
 
 
 
@@ -693,9 +1024,13 @@ link.click();
 function loadStats(){
 
 
-let saved=
+
+let saved =
+
 localStorage.getItem(
+
 "stats"
+
 );
 
 
@@ -703,15 +1038,170 @@ localStorage.getItem(
 if(saved){
 
 
-let s=
+
+let stats =
+
 JSON.parse(saved);
 
 
 
-App.score=s.score||0;
 
 
-App.resolved=s.resolved||0;
+App.score =
+
+stats.score || 0;
+
+
+
+
+
+App.resolved =
+
+stats.resolved || 0;
+
+
+
+}
+
+
+
+
+
+
+updateStats();
+
+
+
+}
+
+
+
+
+
+
+
+
+function saveStats(){
+
+
+
+localStorage.setItem(
+
+
+"stats",
+
+
+JSON.stringify({
+
+
+
+score:App.score,
+
+
+resolved:App.resolved
+
+
+
+})
+
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function updateStats(){
+
+
+
+let resolved =
+
+document.getElementById(
+
+"resolved"
+
+);
+
+
+
+
+
+let correct =
+
+document.getElementById(
+
+"correct"
+
+);
+
+
+
+
+if(resolved){
+
+
+
+resolved.textContent=
+
+App.resolved;
+
+
+
+}
+
+
+
+if(correct){
+
+
+
+correct.textContent=
+
+App.score;
+
+
+
+}
+
+
+
+
+
+
+saveStats();
+
+
+
+}
+
+
+
+
+function completeQuestion(correct){
+
+
+
+App.resolved++;
+
+
+
+
+
+if(correct){
+
+
+
+App.score++;
+
 
 
 }
@@ -727,22 +1217,105 @@ updateStats();
 
 
 
+/*==========================================================
+ EXERCÍCIOS
+==========================================================*/
 
-function updateStats(){
 
-
-
-document
-.getElementById("resolved")
-.textContent=
-App.resolved;
+function loadQuestion(){
 
 
 
-document
-.getElementById("correct")
-.textContent=
-App.score;
+if(typeof questions==="undefined"){
+
+
+
+return;
+
+
+}
+
+
+
+
+App.total =
+
+questions.length;
+
+
+
+
+let total =
+
+document.getElementById(
+
+"totalQuestions"
+
+);
+
+
+
+
+
+if(total){
+
+
+
+total.textContent=
+
+App.total;
+
+
+
+}
+
+
+
+
+let q =
+
+questions[
+
+App.currentQuestion
+
+];
+
+
+
+
+
+
+if(!q){
+
+
+
+return;
+
+
+}
+
+
+
+
+let title =
+
+document.querySelector(
+
+".question h3"
+
+);
+
+
+
+
+
+if(title){
+
+
+
+title.textContent=
+
+"Questão "+q.id;
 
 
 
@@ -752,56 +1325,24 @@ App.score;
 
 
 
+let description =
+
+document.querySelector(
+
+".question p"
+
+);
 
 
 
-/*==========================================================
- EXERCÍCIOS
-==========================================================*/
 
 
-function loadQuestion(){
-
-
-if(
-typeof questions==="undefined"
-)
-return;
+if(description){
 
 
 
-App.total=
-questions.length;
+description.textContent=
 
-
-
-document
-.getElementById("totalQuestions")
-.textContent=
-App.total;
-
-
-
-let q=
-questions[
-App.currentQuestion
-];
-
-
-
-if(!q)return;
-
-
-
-document.querySelector(".question h3")
-.textContent=
-"Questão "+
-(q.id);
-
-
-
-document.querySelector(".question p")
-.textContent=
 q.title;
 
 
@@ -812,16 +1353,131 @@ q.title;
 
 
 
+
+
+setTimeout(()=>{
+
+
+
+loadQuestionCode();
+
+
+
+},500);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function loadQuestionCode(){
+
+
+
+if(!App.editor){
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+let q =
+
+questions[
+
+App.currentQuestion
+
+];
+
+
+
+
+
+
+if(!q){
+
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+changeLanguage(
+
+q.language
+
+);
+
+
+
+
+
+
+setTimeout(()=>{
+
+
+
+App.editor.setValue(
+
+q.answer
+
+);
+
+
+
+},200);
+
+
+
+}
+
+
+
+
+
+
+
+
+
 function nextQuestion(){
 
 
+
 if(
+
 App.currentQuestion <
+
 questions.length-1
+
 ){
 
 
+
 App.currentQuestion++;
+
+
+
 
 
 loadQuestion();
@@ -830,6 +1486,21 @@ loadQuestion();
 
 }
 
+else{
+
+
+
+showConsole(
+
+"Última questão."
+
+);
+
+
+
+}
+
+
 
 }
 
@@ -837,10 +1508,130 @@ loadQuestion();
 
 
 
+
+
+
+
+/*==========================================================
+ DICA E RESPOSTA
+==========================================================*/
+
+
+function showHint(){
+
+
+
+let q =
+
+questions[
+
+App.currentQuestion
+
+];
+
+
+
+
+
+if(q){
+
+
+
+showConsole(
+
+"💡 Dica:\n\n"+q.hint
+
+);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function showAnswer(){
+
+
+
+let q =
+
+questions[
+
+App.currentQuestion
+
+];
+
+
+
+
+
+if(q){
+
+
+
+showConsole(
+
+"✓ Resposta:\n\n"+q.answer
+
+);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+/*==========================================================
+ INÍCIO
+==========================================================*/
+
+
 function home(){
 
 
-changeLanguage("javascript");
+
+changeLanguage(
+
+"javascript"
+
+);
+
+
+
+if(App.editor){
+
+
+
+App.editor.setValue(
+
+getStarterCode("javascript")
+
+);
+
+
+
+}
+
 
 
 }
