@@ -56,68 +56,49 @@ window.onload=function(){
 
 loadStats();
 
+
 initMonaco();
+
+
+
+const languageSelect =
+document.getElementById("lang");
+
+
+
+if(languageSelect){
+
+
+languageSelect.addEventListener(
+"change",
+function(){
+
+changeLanguage(this.value);
+
+}
+
+);
+
+}
+
+
+
+const runButton =
+document.getElementById("run");
+
+
+
+if(runButton){
+
+
+runButton.onclick=function(){
+
+executeCode();
 
 };
 
 
-
-    const languageSelect =
-
-    document.getElementById("lang");
-
-
-
-    if(languageSelect){
-
-
-
-        languageSelect.addEventListener(
-
-            "change",
-
-            function(){
-
-
-                changeLanguage(this.value);
-
-
-            }
-
-        );
-
-    }
-
-
-
-
-
-
-    const runButton =
-
-    document.getElementById("run");
-
-
-
-    if(runButton){
-
-
-
-        runButton.onclick=function(){
-
-
-            executeCode();
-
-
-        };
-
-
-    }
-
-
-
-    initMonaco();
-
+}
 
 
 };
