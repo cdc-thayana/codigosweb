@@ -406,18 +406,16 @@ h3{
 
 
 
-#editor{
 
+ #editor{
 
-    flex:1;
+height:500px;
 
+width:100%;
 
-    min-height:350px;
+border:1px solid #555;
 
-
-    border:
-
-    1px solid #333;
+}
 
 
 }
