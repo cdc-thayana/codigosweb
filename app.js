@@ -320,30 +320,21 @@ console.log("Olá Mundo");
  TROCAR LINGUAGEM
 ==========================================================*/
 
-
 function changeLanguage(lang){
 
 
-
-App.language=lang;
-
+App.language = lang;
 
 
-const select =
 
-document.getElementById("lang");
-
+const select = document.getElementById("lang");
 
 
 if(select){
 
-
-select.value=lang;
-
+select.value = lang;
 
 }
-
-
 
 
 
@@ -352,47 +343,36 @@ if(App.editor){
 
 
 
-let editorLanguage =
-
-lang==="python"
-
-?
-
-"python"
-
-:
-
-lang;
-
-
+let editorLanguage = lang;
 
 
 
 monaco.editor.setModelLanguage(
 
-
 App.editor.getModel(),
 
-
 editorLanguage
-
 
 );
 
 
 
 
+// troca o código inicial
+
+App.editor.setValue(
+
+getStarterCode(lang)
+
+);
+
+
 
 }
 
 
 
 }
-
-
-
-
-
 
 
 
