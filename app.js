@@ -1,74 +1,48 @@
 /*==========================================================
  PRATICANDO COM PYTHON E JAVASCRIPT
+
  app.js
- Versão 2.0
- Plataforma de Estudos
+ Versão 3.0
+
+ Controlador Principal
+
 ==========================================================*/
+
 
 "use strict";
 
 
+
 /*==========================================================
- CONFIGURAÇÃO GLOBAL
+ CONFIGURAÇÃO
 ==========================================================*/
 
 
 const App = {
 
 
-version:"2.0",
+version:"3.0",
 
 
 language:"javascript",
 
 
-theme:"dark",
+editor:null,
+
+
+projectName:"Projeto Novo",
 
 
 autoSave:true,
 
 
-editor:null,
-
-
-projectName:"Novo Projeto",
-
-
-executionCount:0,
-
-
-score:0,
-
-
-stats:{
-
-
-questions:0,
-
-correct:0,
-
-time:0
-
-
-},
-
-
-files:{
-
-
-javascript:"",
-
-python:"",
-
-html:"",
-
-css:""
-
-
-}
+running:false,
 
 
 };
+
+
+
 
 
 
@@ -77,10 +51,14 @@ css:""
 ==========================================================*/
 
 
-window.addEventListener("DOMContentLoaded",()=>{
+window.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
 
 
-startApp();
+initialize();
 
 
 });
@@ -88,32 +66,29 @@ startApp();
 
 
 
-async function startApp(){
+
+function initialize(){
+
 
 
 console.log(
+
 "🚀 Plataforma iniciada"
+
 );
 
 
 
-loadStorage();
+createEditor();
 
 
-
-initializeEditor();
-
+loadProject();
 
 
-events();
-
-
-
-updateStats();
+createEvents();
 
 
 }
-
 
 
 
@@ -123,42 +98,47 @@ updateStats();
 ==========================================================*/
 
 
-function initializeEditor(){
+function createEditor(){
 
 
-if(typeof monaco==="undefined"){
+
+require(
+
+[
+
+"vs/editor/editor.main"
+
+],
 
 
-console.warn(
-"Monaco Editor não carregado"
-);
-
-
-return;
-
-
-}
+function(){
 
 
 
 App.editor =
+
 monaco.editor.create(
 
-document.getElementById("editor"),
+document.getElementById(
+
+"editor"
+
+),
 
 
 {
 
 
-value:
-getStarterCode(),
+value:getDefaultCode(),
 
 
 language:
+
 App.language,
 
 
 theme:
+
 "vs-dark",
 
 
@@ -168,86 +148,132 @@ automaticLayout:true,
 fontSize:15,
 
 
-minimap:{enabled:false}
+minimap:
+
+{
+
+enabled:false
+
+}
+
+
+
+}
+
+
+
+);
 
 
 
 });
 
 
+
 }
 
 
 
 
+function getDefaultCode(){
 
-function changeLanguage(lang){
+
+return `
+
+console.log("Olá mundo");
+
+`;
 
 
-App.language=lang;
+
+}
+
+
+
+
+/*==========================================================
+ TROCA DE LINGUAGEM
+==========================================================*/
+
+
+function changeLanguage(language){
+
+
+
+App.language = language;
+
+
+
+let model =
+
+App.editor.getModel();
 
 
 
 monaco.editor.setModelLanguage(
 
-App.editor.getModel(),
+model,
 
-lang
+language
 
 );
 
 
 
-App.editor.setValue(
-getStarterCode()
-);
+switch(language){
 
-
-
-autoSave();
-
-
-
-}
-
-
-
-
-/*==========================================================
- CÓDIGO INICIAL
-==========================================================*/
-
-
-function getStarterCode(){
-
-
-
-switch(App.language){
 
 
 case"python":
 
-return `print("Olá Python")`;
+
+App.editor.setValue(
+
+'print("Olá Python")'
+
+);
+
+
+break;
 
 
 
 case"html":
 
-return `<h1>Minha Página</h1>`;
+
+App.editor.setValue(
+
+"<h1>Minha Página</h1>"
+
+);
+
+
+break;
 
 
 
 case"css":
 
-return `body{
-background:white;
-}`;
+
+App.editor.setValue(
+
+"body{background:red;}"
+
+);
+
+
+break;
 
 
 
 default:
 
-return `console.log("Olá JavaScript");`;
+
+App.editor.setValue(
+
+'console.log("Olá JavaScript");'
+
+);
 
 
 
@@ -255,285 +281,137 @@ return `console.log("Olá JavaScript");`;
 
 
 
-}
 
+}
 
 
 
 
 /*==========================================================
- EXECUÇÃO PRINCIPAL
+ EXECUTAR
 ==========================================================*/
 
 
-function run(){
+async function run(){
+
+
+
+if(App.running)
+
+return;
+
+
+
+App.running=true;
+
 
 
 clearConsole();
 
 
 
-App.executionCount++;
+let code =
+
+App.editor.getValue();
+
+
+
+let result;
+
+
+
+try{
 
 
 
 switch(App.language){
 
 
+
 case"javascript":
 
-executeJavaScript();
+
+result =
+
+JSRunner.execute(code);
+
 
 break;
+
 
 
 
 case"python":
 
-executePython();
+
+result =
+
+await PythonRunner.execute(code);
+
 
 break;
+
 
 
 
 case"html":
 
-executeHTML();
+
+result =
+
+HTMLRunner.execute(code);
+
 
 break;
+
 
 
 
 case"css":
 
-executeCSS();
+
+result =
+
+HTMLRunner.executeCSS(code);
+
 
 break;
 
 
 
-default:
-
-log(
-"Linguagem não encontrada"
-);
-
-
-}
-
-
-
-saveStats();
-
-
-
 }
 
 
 
 
-
-
-/*==========================================================
- JAVASCRIPT
-==========================================================*/
-
-
-function executeJavaScript(){
-
-
-let output=[];
-
-
-const oldLog=
-console.log;
-
-
-
-console.log=(...args)=>{
-
-
-output.push(
-args.join(" ")
-);
-
-
-};
-
-
-
-try{
-
-
-new Function(
-
-App.editor.getValue()
-
-)();
-
-
-
-output.forEach(log);
+writeConsole(result);
 
 
 
 }
-
 
 catch(error){
 
 
-showError(error);
 
+writeConsole(
 
-}
-
-
-
-console.log=oldLog;
-
-
-
-}
-
-
-
-
-/*==========================================================
- PYTHON PYODIDE
-==========================================================*/
-
-
-async function executePython(){
-
-
-if(!window.pyodide){
-
-
-log(
-"Carregando Python..."
-);
-
-
-window.pyodide =
-await loadPyodide();
-
-
-}
-
-
-
-try{
-
-
-let result =
-
-await pyodide.runPythonAsync(
-
-App.editor.getValue()
+"❌ "+error.message
 
 );
 
 
 
-log(result ?? "");
+}
+
+
+
+App.running=false;
 
 
 
 }
 
-
-catch(error){
-
-
-showError(error);
-
-
-
-}
-
-
-}
-
-
-
-
-
-/*==========================================================
- HTML
-==========================================================*/
-
-
-function executeHTML(){
-
-
-const preview=
-
-document.getElementById(
-"preview"
-);
-
-
-
-preview.srcdoc =
-
-App.editor.getValue();
-
-
-
-log(
-"HTML atualizado"
-);
-
-
-
-}
-
-
-
-
-/*==========================================================
- CSS
-==========================================================*/
-
-
-function executeCSS(){
-
-
-const preview=
-
-document.getElementById(
-"preview"
-);
-
-
-
-preview.srcdoc=`
-
-<style>
-
-${App.editor.getValue()}
-
-</style>
-
-
-<h1>
-
-Preview CSS
-
-</h1>
-
-
-`;
-
-
-
-log(
-"CSS aplicado"
-);
-
-
-}
 
 
 
@@ -543,34 +421,16 @@ log(
 ==========================================================*/
 
 
-function clearConsole(){
-
-
-const box=
-
-document.getElementById(
-"console"
-);
+function writeConsole(text){
 
 
 
-if(box)
-
-box.textContent="";
-
-
-}
-
-
-
-
-function log(text){
-
-
-const box=
+const box =
 
 document.getElementById(
-"console"
+
+"consoleOutput"
+
 );
 
 
@@ -582,43 +442,58 @@ box.textContent +=
 text+"\n";
 
 
+
 }
 
 
 
 
+function clearConsole(){
 
-function showError(error){
 
 
-log(
-"❌ ERRO\n"+
-error.message
+const box=
+
+document.getElementById(
+
+"consoleOutput"
 
 );
 
 
-}
 
+if(box)
+
+box.textContent="";
+
+
+
+}
 
 
 
 
 /*==========================================================
- SALVAR PROJETO
+ SALVAR
 ==========================================================*/
 
 
 function saveProject(){
 
 
-const data={
+
+let project={
 
 
-name:App.projectName,
+
+name:
+
+App.projectName,
 
 
-language:App.language,
+language:
+
+App.language,
 
 
 code:
@@ -628,7 +503,8 @@ App.editor.getValue(),
 
 date:
 
-new Date()
+new Date().toISOString()
+
 
 
 };
@@ -639,15 +515,18 @@ localStorage.setItem(
 
 "PPJ_PROJECT",
 
-JSON.stringify(data)
+JSON.stringify(project)
 
 );
 
 
 
-log(
+writeConsole(
+
 "💾 Projeto salvo"
+
 );
+
 
 
 }
@@ -655,18 +534,22 @@ log(
 
 
 
+
 /*==========================================================
- CARREGAR PROJETO
+ CARREGAR
 ==========================================================*/
 
 
-function loadStorage(){
+function loadProject(){
 
 
-const data=
+
+let data =
 
 localStorage.getItem(
+
 "PPJ_PROJECT"
+
 );
 
 
@@ -677,46 +560,37 @@ return;
 
 
 
-const project=
+let project=
 
 JSON.parse(data);
 
 
 
 App.language=
+
 project.language;
 
 
 
-App.projectName=
-project.name;
+setTimeout(()=>{
 
 
-}
+if(App.editor)
 
+App.editor.setValue(
 
+project.code
 
-
-
-/*==========================================================
- AUTO SAVE
-==========================================================*/
-
-
-function autoSave(){
-
-
-if(!App.autoSave)
-
-return;
+);
 
 
 
-saveProject();
+},1000);
 
 
 
 }
+
 
 
 
@@ -731,17 +605,15 @@ function newProject(){
 
 
 if(confirm(
-"Novo projeto?"
-)){
 
+"Criar novo projeto?"
+
+)){
 
 
 App.editor.setValue("");
 
-
-
 clearConsole();
-
 
 
 }
@@ -762,20 +634,23 @@ clearConsole();
 function downloadProject(){
 
 
-const code=
+
+const code =
 
 App.editor.getValue();
 
 
 
-const blob=
+const file =
 
 new Blob(
 
 [code],
 
 {
+
 type:"text/plain"
+
 }
 
 );
@@ -785,14 +660,16 @@ type:"text/plain"
 const link=
 
 document.createElement(
+
 "a"
+
 );
 
 
 
 link.href=
 
-URL.createObjectURL(blob);
+URL.createObjectURL(file);
 
 
 
@@ -813,77 +690,27 @@ link.click();
 
 
 /*==========================================================
- ESTATÍSTICAS
-==========================================================*/
-
-
-function updateStats(){
-
-
-localStorage.setItem(
-
-"PPJ_STATS",
-
-JSON.stringify(
-App.stats
-)
-
-);
-
-
-
-}
-
-
-
-
-function saveStats(){
-
-
-App.stats.time++;
-
-updateStats();
-
-
-}
-
-
-
-
-/*==========================================================
  EVENTOS
 ==========================================================*/
 
 
-function events(){
+function createEvents(){
 
 
 
-const runButton=
+const buttonRun=
 
 document.getElementById(
+
 "run"
+
 );
 
 
 
-if(runButton)
+if(buttonRun)
 
-runButton.onclick=run;
-
-
-
-const saveButton=
-
-document.getElementById(
-"save"
-);
-
-
-
-if(saveButton)
-
-saveButton.onclick=saveProject;
+buttonRun.onclick=run;
 
 
 
@@ -892,9 +719,8 @@ saveButton.onclick=saveProject;
 
 
 
-
 /*==========================================================
- EXPORTAÇÃO GLOBAL
+ EXPORTAR
 ==========================================================*/
 
 
@@ -905,20 +731,25 @@ window.run=run;
 
 
 window.saveProject=
+
 saveProject;
 
 
-window.newProject=
-newProject;
-
-
 window.downloadProject=
+
 downloadProject;
 
 
 window.clearConsole=
+
 clearConsole;
 
 
 window.changeLanguage=
+
 changeLanguage;
+
+
+window.newProject=
+
+newProject;
