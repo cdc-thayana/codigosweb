@@ -505,26 +505,30 @@ Tempo:
 
 <script>
 
-
 require.config({
 
 paths:{
-
-'vs':
-'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs'
-
+vs:
+"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
 }
 
 });
 
 
+require(
+[
+"vs/editor/editor.main"
+],
+
+function(){
+
+console.log("Monaco carregado");
+
+}
+
+);
 
 </script>
-
-
-
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-
 
 
 <script src="questions.js"></script>
@@ -532,7 +536,6 @@ paths:{
 <script src="runners/python38.js"></script>
 <script src="runners/html.js"></script>
 <script src="app.js"></script>
-
 
 
 </body>
